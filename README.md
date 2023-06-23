@@ -1,2 +1,2 @@
-# code_blue
-Unofficial pip compatible code_blue metric 
+# CodeBLEU
+Unofficial pip compatible CodeBLEU metric 
