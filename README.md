@@ -1,2 +1,4 @@
 # CodeBLEU
-Unofficial pip compatible CodeBLEU metric 
+Unofficial pip/hf compatible `CodeBLEU` implementation
+
+

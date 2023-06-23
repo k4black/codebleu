@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "codebleu"
+description = "Unofficial pip/hf compatible `CodeBLEU` implementation"
+readme = "README.md"
+license = {text = "MIT License"}
+authors = [
+  {name = "Konstantin Chernyshev", email = "kdchernyshev@gmail.com"},
+]
+dynamic = ["version"]
+
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Typing :: Typed"
+]
+
+dependencies = [
+    "tree-sitter >=0.20.0,<1.0.0",
+]
+
+
+[project.urls]
+homepage = "https://github.com/k4black/codebleu"
+
+
+[project.optional-dependencies]
+test = [
+    "pytest >=7.0.0,<8.0.0",
+    "pytest-cov >=4.0.0,<5.0.0",
+    "pytest-mock >=3.0.0,<4.0.0",
+    "black ==23.1.0",
+    "mypy >=1.0.0,<2.0.0",
+    "flake8 >=6.0.0,<7.0.0",
+    "isort >=5.11.0,<6.0.0",
+]
+
+
+
+[tool.setuptools.dynamic]
+version = {file = "VERSION"}
+
+
+[mypy]
+ignore_missing_imports = true
+no_incremental = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = false
+disallow_any_generics = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unreachable = true
+allow_untyped_decorators = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "--cov=codebleu/ --cov-report term-missing"
+
+[tool.isort]
+profile = "black"
+src_paths = ["codebleu", "tests"]
+known_first_party = ["codebleu", "tests"]
+line_length = 120
+combine_as_imports = true
