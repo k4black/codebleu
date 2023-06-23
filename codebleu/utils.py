@@ -3,7 +3,7 @@
 # Copyright (C) 2001-2020 NLTK Project
 # Author: Steven Bird <stevenbird1@gmail.com>
 # URL: <http://nltk.org/>
-# For license information, see LICENSE.TXT
+# For license information, see LICENSE
 
 from itertools import chain
 

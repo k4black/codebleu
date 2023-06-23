@@ -1,12 +1,13 @@
 # Copyright (c) Microsoft Corporation. 
 # Licensed under the MIT license.
 
-from parser import DFG_python,DFG_java,DFG_ruby,DFG_go,DFG_php,DFG_javascript,DFG_csharp
-from parser import (remove_comments_and_docstrings,
+from tree_sitter import Language, Parser
+
+from .parser import DFG_python,DFG_java,DFG_ruby,DFG_go,DFG_php,DFG_javascript,DFG_csharp
+from .parser import (remove_comments_and_docstrings,
                    tree_to_token_index,
                    index_to_code_token,
                    tree_to_variable_index)
-from tree_sitter import Language, Parser
 
 dfg_function={
     'python':DFG_python,
@@ -18,11 +19,14 @@ dfg_function={
     'c_sharp':DFG_csharp,
 }
 
-def calc_syntax_match(references, candidate, lang):
-    return corpus_syntax_match([references], [candidate], lang)
 
-def corpus_syntax_match(references, candidates, lang):   
-    JAVA_LANGUAGE = Language('parser/my-languages.so', lang)
+def calc_syntax_match(references, candidate, lang, langso_so_file):
+    return corpus_syntax_match([references], [candidate], lang, langso_so_file)
+
+
+def corpus_syntax_match(references, candidates, lang, langso_so_file):
+    # print(os.listdir())
+    JAVA_LANGUAGE = Language(langso_so_file, lang)
     parser = Parser()
     parser.set_language(JAVA_LANGUAGE)
     match_count = 0
@@ -58,6 +62,7 @@ def corpus_syntax_match(references, candidates, lang):
                             depth = cur_depth + 1
                             node_stack.append([child_node, depth])
                 return sub_tree_sexp_list
+
             cand_sexps = [x[0] for x in get_all_sub_trees(candidate_tree)]
             ref_sexps = get_all_sub_trees(reference_tree)
 

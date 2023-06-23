@@ -1,13 +1,14 @@
-# Copyright (c) Microsoft Corporation. 
+# Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from parser import DFG_python,DFG_java,DFG_ruby,DFG_go,DFG_php,DFG_javascript,DFG_csharp
-from parser import (remove_comments_and_docstrings,
+from tree_sitter import Language, Parser
+
+from .parser import DFG_python,DFG_java,DFG_ruby,DFG_go,DFG_php,DFG_javascript,DFG_csharp
+from .parser import (remove_comments_and_docstrings,
                    tree_to_token_index,
                    index_to_code_token,
                    tree_to_variable_index)
-from tree_sitter import Language, Parser
-import pdb
+
 
 dfg_function={
     'python':DFG_python,
@@ -19,11 +20,11 @@ dfg_function={
     'c_sharp':DFG_csharp,
 }
 
-def calc_dataflow_match(references, candidate, lang):
-    return corpus_dataflow_match([references], [candidate], lang)
+def calc_dataflow_match(references, candidate, lang, langso_so_file):
+    return corpus_dataflow_match([references], [candidate], lang, langso_so_file)
 
-def corpus_dataflow_match(references, candidates, lang):   
-    LANGUAGE = Language('parser/my-languages.so', lang)
+def corpus_dataflow_match(references, candidates, lang, langso_so_file):
+    LANGUAGE = Language(langso_so_file, lang)
     parser = Parser()
     parser.set_language(LANGUAGE)
     parser = [parser,dfg_function[lang]]
