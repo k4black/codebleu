@@ -72,3 +72,4 @@ src_paths = ["codebleu", "tests"]
 known_first_party = ["codebleu", "tests"]
 line_length = 120
 combine_as_imports = true
+skip = ["build", "dist", ".venv", ".eggs", ".mypy_cache", ".pytest_cache", ".git", ".tox", ".nox", "codebleu/parser"]
