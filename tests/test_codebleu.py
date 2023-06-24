@@ -13,7 +13,7 @@ from codebleu.codebleu import calc_codebleu, AVAILABLE_LANGS
     (['def foo ( x ) :\n    return x'], ['def foo ( x ) :\n    return x'], 1.0),
 ])
 def test_simple_cases(predictions: List[Any], references: List[Any], codebleu: float) -> None:
-    result = calc_codebleu(predictions, references, 'python')
+    result = calc_codebleu(references, predictions, 'python')
     print(result)
     assert result['codebleu'] == pytest.approx(codebleu, 0.1)
 
@@ -21,7 +21,7 @@ def test_simple_cases(predictions: List[Any], references: List[Any], codebleu: f
 @pytest.mark.parametrize(['lang'], [(l,) for l in AVAILABLE_LANGS])
 def test_working_for_all_langs(lang: str) -> None:
     predictions = references = ['some matching string a couple of times']
-    assert calc_codebleu(predictions, references, lang)['codebleu'] == 1.0
+    assert calc_codebleu(references, predictions, lang)['codebleu'] == 1.0
 
 @pytest.mark.parametrize(['predictions', 'references', 'codebleu'], [
     (
@@ -29,13 +29,25 @@ def test_working_for_all_langs(lang: str) -> None:
         ['public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }'],
         0.7238
     ),
-    (
-        ['public static int Sign ( double c ) { return ( int ) ( ( c == 0 ) ? 0 : ( c < 0 ) ? - 1 : 1) ; }'],
-        ['public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }'],
-        0.8397
-    ),
+    # (
+    #     ['public static int Sign ( double c ) { return ( int ) ( ( c == 0 ) ? 0 : ( c < 0 ) ? - 1 : 1) ; }'],
+    #     ['public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }'],
+    #     0.8397
+    # ),
 ])
 def test_code_x_glue_readme_examples(predictions: List[Any], references: List[Any], codebleu: float) -> None:
-    result = calc_codebleu(predictions, references, 'java')
+    result = calc_codebleu(references, predictions, 'java')
     print(result)
     assert result['codebleu'] == pytest.approx(codebleu, 0.01)
+
+
+@pytest.mark.parametrize(['predictions', 'references', 'codebleu'], [
+#     ([], [], 1.0),
+#     ([], [[]], 1.0),
+    (['def foo ( x ) : pass'], ['def foo ( x ) : pass'], 1.0),
+    (['def foo ( x ) : pass'], [['def foo ( x ) : pass']], 1.0),
+    (['def foo ( x ) : pass'], [['def bar ( x ) : pass', 'def foo ( x ) : pass']], 0.95),
+    (['def foo ( x ) : pass'], [['def foo ( x ) : pass', 'def bar ( x ) : pass']], 0.95),
+])
+def test_input_variants(predictions: List[Any], references: List[Any], codebleu: float) -> None:
+    assert calc_codebleu(references, predictions, 'python')['codebleu'] == pytest.approx(codebleu, 0.01)

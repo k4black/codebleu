@@ -2,9 +2,10 @@
 # Copyright (c) 2023 Konstantin Chernyshev.
 # Licensed under the MIT license.
 from pathlib import Path
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple, Union
 
 from . import bleu, dataflow_match, syntax_match, weighted_ngram_match
+
 
 PACKAGE_DIR = Path(__file__).parent
 # AVAILABLE_LANGS = ['java', 'js', 'c_sharp', 'php', 'go', 'python', 'ruby']
@@ -12,8 +13,8 @@ AVAILABLE_LANGS = ["java", "c_sharp", "python"]  # only keywords available
 
 
 def calc_codebleu(
+    references: Union[List[str], List[List[str]]],
     predictions: List[str],
-    references: List[str],
     lang: str,
     tokenizer: Optional[Callable] = None,
     weights: Tuple[float, float, float, float] = (0.25, 0.25, 0.25, 0.25),

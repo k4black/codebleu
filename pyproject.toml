@@ -25,6 +25,8 @@ dependencies = [
     "tree-sitter >=0.20.0,<1.0.0",
 ]
 
+[project.scripts]
+codebleu = "codebleu.__main__:main"
 
 [project.urls]
 homepage = "https://github.com/k4black/codebleu"
@@ -35,9 +37,10 @@ test = [
     "pytest >=7.0.0,<8.0.0",
     "pytest-cov >=4.0.0,<5.0.0",
     "pytest-mock >=3.0.0,<4.0.0",
-    "black ==23.1.0",
+    "black ==23.3.0",
     "mypy >=1.0.0,<2.0.0",
     "flake8 >=6.0.0,<7.0.0",
+    "ruff >=0.0.275,<0.1.0",
     "isort >=5.11.0,<6.0.0",
 ]
 
