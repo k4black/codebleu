@@ -44,12 +44,14 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'pip' # caching pip dependencies
-#      - name: Build wheels
-#        uses: pypa/cibuildwheel@v2.13.1
       - name: Build wheels
-        run: |
-          python -m pip install --upgrade build
-          python -m build --wheel --outdir wheelhouse
+        uses: pypa/cibuildwheel@v2.13.1
+        with:
+          output-dir: wheelhouse
+#      - name: Build wheels
+#        run: |
+#          python -m pip install --upgrade build
+#          python -m build --wheel --outdir wheelhouse
       - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
