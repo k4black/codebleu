@@ -1,0 +1,5 @@
+include ./*
+include ./codebleu/*
+include ./codebleu/keywords/*.txt
+include ./codebleu/parser/*.sh ./codebleu/parser/*.so ./codebleu/parser/*.dylib ./codebleu/parser/*.dll
+recursive-include ./codebleu/parser/tree-sitter *

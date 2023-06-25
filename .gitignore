@@ -1,11 +1,8 @@
 # tree-sitter packages
-codebleu/parser/tree-sitter-c-sharp/
-codebleu/parser/tree-sitter-go/
-codebleu/parser/tree-sitter-java/
-codebleu/parser/tree-sitter-javascript/
-codebleu/parser/tree-sitter-php/
-codebleu/parser/tree-sitter-python/
-codebleu/parser/tree-sitter-ruby/
+codebleu/parser/tree-sitter/
+codebleu/parser/*.so
+codebleu/parser/*.dylib
+codebleu/parser/*.dll
 
 
 
