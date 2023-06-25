@@ -46,20 +46,23 @@ jobs:
           echo "VERSION"
           echo "CHANGELOG"
 
+  external-build-workflow:
+    uses: ./.github/workflows/build.yml
+    with:
+      CIBW_SKIP: "pp* cp36-* cp37-*"
+      CIBW_BUILD: "cp*-macosx* cp*-manylinux*"
+    secrets: inherit
+
   release-python-package:
-    needs: update-version-and-changelog
+    needs: [external-build-workflow, update-release-github, update-version-and-changelog]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
         with:
-          ref: ${{ github.ref_name }}
-      - name: Setup Python 3.11
-        uses: actions/setup-python@v4
+          name: artifact  # if `name: artifact` is omitted, the action will create extra parent dir
+          path: dist
+      # TODO: Trusted publishing
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          python-version: 3.11
-          cache: 'pip' # caching pip dependencies
-      - name: Build python package
-        run: | # TODO: build so file?          
-          python -m pip install wheel build twine
-          python -m pip wheel . --no-deps --wheel-dir dist
-          python -m twine upload -u __token__ -p ${{ secrets.PYPI_TOKEN }} dist/*
+          password: ${{ secrets.PYPI_TOKEN }}

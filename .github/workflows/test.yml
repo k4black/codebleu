@@ -31,7 +31,6 @@ jobs:
 #        run: python -m mypy codebleu
 
   external-build-workflow:
-    name: Call wheel and sdist build workflow
     uses: ./.github/workflows/build.yml
     with:
       CIBW_SKIP: "pp* cp36-* cp37-*"
@@ -39,6 +38,7 @@ jobs:
     secrets: inherit
 
   test-python:
+    needs: [external-build-workflow]
     strategy:
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11']
@@ -46,14 +46,11 @@ jobs:
       fail-fast: false
     name: Test wheel on ${{ matrix.os }} and Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
-    needs: [external-build-workflow]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
-          # unpacks default artifact into dist/
-          # if `name: artifact` is omitted, the action will create extra parent dir
-          name: artifact
+          name: artifact  # if `name: artifact` is omitted, the action will create extra parent dir
           path: dist
       - name: Show dist files
         run: ls -lah ./dist
@@ -67,7 +64,7 @@ jobs:
           # force install package from local dist directory
           # TODO: check the sdist package is not installed
           rm -rf ./dist/*.tar.gz
-          pip install --update --no-deps --no-index --find-links=./dist codebleu
+          pip install --upgrade --no-deps --no-index --find-links=./dist codebleu
           # install dependencies for the package and tests
           pip install .[test]
       - name: Test itself
