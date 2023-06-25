@@ -39,6 +39,7 @@ test = [
     "pytest-mock >=3.0.0,<4.0.0",
     "black ==23.3.0",
     "mypy >=1.0.0,<2.0.0",
+    "types-tree-sitter",
     "flake8 >=6.0.0,<7.0.0",
     "ruff >=0.0.275,<0.1.0",
     "isort >=5.11.0,<6.0.0",
@@ -76,3 +77,10 @@ known_first_party = ["codebleu", "tests"]
 line_length = 120
 combine_as_imports = true
 skip = ["build", "dist", ".venv", ".eggs", ".mypy_cache", ".pytest_cache", ".git", ".tox", ".nox", "codebleu/parser"]
+
+[tool.black]
+line_length=120
+target_version=["py38","py39","py310","py311"]
+
+[tool.ruff]
+line-length=120
