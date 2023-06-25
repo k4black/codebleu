@@ -16,7 +16,6 @@ __pycache__/
 
 # C extensions
 *.so
-!codebleu/parser/my-languages.so
 
 # Distribution / packaging
 .Python
