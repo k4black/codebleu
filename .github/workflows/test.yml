@@ -30,7 +30,7 @@ jobs:
 #      - name: Run mypy check
 #        run: python -m mypy codebleu
 
-  call-build-workflow:
+  external-build-workflow:
     name: Call wheel and sdist build workflow
     uses: ./.github/workflows/build.yml
     with:
@@ -46,7 +46,7 @@ jobs:
       fail-fast: false
     name: Test wheel on ${{ matrix.os }} and Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
-    needs: [build-wheels, build-sdist]
+    needs: [external-build-workflow]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
