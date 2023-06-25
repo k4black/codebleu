@@ -1,0 +1,43 @@
+name: Build sdist and wheel
+
+on:
+  workflow_call:
+    inputs:
+      CIBW_SKIP:
+        required: true
+        type: string
+      CIBW_BUILD:
+        required: true
+        type: string
+
+
+build-wheels:
+  strategy:
+    matrix:
+      os: [ubuntu-latest, macos-latest]
+    fail-fast: false
+  name: Build wheels on ${{ matrix.os }}
+  runs-on: ${{ matrix.os }}
+  steps:
+    - uses: actions/checkout@v3
+    - name: Build wheels
+      uses: pypa/cibuildwheel@v2.13.1
+      with:
+        output-dir: wheelhouse
+      env:
+        CIBW_SKIP: ${{ inputs.CIBW_SKIP }}
+        CIBW_BUILD: ${{ inputs.CIBW_BUILD }}
+    - uses: actions/upload-artifact@v3
+      with:
+        path: ./wheelhouse/*.whl
+
+build-sdist:
+  name: Build source distribution
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v3
+    - name: Build sdist
+      run: pipx run build --sdist
+    - uses: actions/upload-artifact@v3
+      with:
+        path: dist/*.tar.gz
