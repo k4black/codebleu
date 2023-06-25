@@ -47,6 +47,7 @@ jobs:
           echo "CHANGELOG"
 
   external-build-workflow:
+    needs: update-version-and-changelog
     uses: ./.github/workflows/build.yml
     with:
       CIBW_SKIP: "pp* cp36-* cp37-*"
