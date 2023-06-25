@@ -55,8 +55,22 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
+        env:
+          CIBW_SKIP: "pp* cp36-* cp37-*"
+          CIBW_BUILD: "cp*-macosx* cp*-manylinux*"
       - name: Show wheel files
         run: ls -lah ./wheelhouse
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build sdist
+        run: pipx run build --sdist
+      - uses: actions/upload-artifact@v3
+        with:
+          path: dist/*.tar.gz
 
   test-python:
     strategy:
@@ -66,7 +80,7 @@ jobs:
       fail-fast: false
     name: Test wheel on ${{ matrix.os }} and Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
-    needs: [build_wheels]
+    needs: [build_wheels, build_sdist]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
@@ -85,7 +99,9 @@ jobs:
       - name: Install dependencies
         run: |
           # install package from local dist directory
-          pip install --no-index --find-links=./dist codebleu
+          # TODO: check the sdist package is not installed
+          rm -rf ./dist/*.tar.gz
+          pip install --no-deps --no-index --find-links=./dist codebleu
           # install dependencies for the package and tests
           pip install .[test]
       - name: Test itself
