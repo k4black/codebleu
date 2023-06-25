@@ -31,13 +31,11 @@ include-package-data = true
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["codebleu", "codebleu.parser"]
-exclude = ["tests", "tests.*"]
+exclude = ["tests", "tests.*", "codebleu.parser.tree-sitter"]
 
 
 [tool.setuptools.package-data]
 "*" = ["py.typed", ".txt", "*.so", "*.dylib", "*.dll"]
-#codebleu.parser = [".sh", "*.so", "*.dylib", "*.dll"]
-
 
 
 [project.scripts]
@@ -78,13 +76,17 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_unreachable = true
 allow_untyped_decorators = true
-exclude = ["codebleu/parser"]
+exclude = ["codebleu/parser/tree-sitter", "codebleu/parser/tree-sitter/python"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "--cov=codebleu/ --cov-report term-missing"
+
+[tool.coverage.run]
+omit = ["tests/*", "codebleu/parser/tree-sitter/*"]
+
 
 [tool.isort]
 profile = "black"

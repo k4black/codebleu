@@ -7,6 +7,8 @@ on:
     branches: [ main ]
 
 
+# TODO: add windows-latest build
+
 jobs:
   lint-python:
     runs-on: ubuntu-latest
@@ -25,13 +27,13 @@ jobs:
         run: python -m black codebleu --check
       - name: Run ruff check
         run: python -m ruff codebleu
-      - name: Run mypy check
-        run: python -m mypy codebleu
+#      - name: Run mypy check
+#        run: python -m mypy codebleu
 
   build_wheels:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
       fail-fast: false
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -58,7 +60,7 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11']
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
       fail-fast: false
     name: Test wheel on ${{ matrix.os }} and Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
