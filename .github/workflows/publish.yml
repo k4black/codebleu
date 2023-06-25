@@ -59,7 +59,7 @@ jobs:
           python-version: 3.11
           cache: 'pip' # caching pip dependencies
       - name: Build python package
-        run: |
+        run: | # TODO: build so file?          
           python -m pip install wheel build twine
           python -m pip wheel . --no-deps --wheel-dir dist
-          twine upload -u __token__ -p ${{ secrets.PYPI_TOKEN }} dist/*
+          python -m twine upload -u __token__ -p ${{ secrets.PYPI_TOKEN }} dist/*
