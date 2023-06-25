@@ -25,6 +25,9 @@ dependencies = [
     "tree-sitter >=0.20.0,<1.0.0",
 ]
 
+[tool.setuptools]
+packages = ["codebleu"]
+
 [project.scripts]
 codebleu = "codebleu.__main__:main"
 
