@@ -44,7 +44,7 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - name: Install dependencies
         run: |
-          pip install -e .
+          pip install tree_sitter
       - name: Prebuild so file for the system
         run: |
           cd codebleu/parser
