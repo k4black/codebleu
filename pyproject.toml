@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel"]
+requires = ["setuptools>=61.0.0", "wheel", "tree-sitter>=0.20.0,<1.0.0"]
 build-backend = "setuptools.build_meta"
 
 
