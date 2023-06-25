@@ -30,15 +30,31 @@ jobs:
 #      - name: Run mypy check
 #        run: python -m mypy codebleu
 
+  # First run tests to fail fast, then testing on all python versions and os
+  fast-tests-python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip' # caching pip dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install -e .[test]
+      - name: Run tests
+        run: python -m pytest
+
   external-build-workflow:
+    needs: [fast-test-python]
     uses: ./.github/workflows/build.yml
     with:
       CIBW_SKIP: "pp* cp36-* cp37-*"
       CIBW_BUILD: "cp*-macosx* cp*-manylinux*"
     secrets: inherit
 
-  test-python:
-    needs: [external-build-workflow]
+  full-tests-python:
+    needs: [fast-test-python, external-build-workflow]
     strategy:
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11']
