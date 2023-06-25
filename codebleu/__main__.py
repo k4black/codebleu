@@ -4,22 +4,21 @@
 # -*- coding:utf-8 -*-
 import argparse
 from pathlib import Path
-from typing import Tuple, List
+from typing import List, Tuple
 
 from . import calc_codebleu
 
-
 PACKAGE_DIR = Path(__file__).parent
 
+
 def main(
-        ref_files: List[str],
-        hyp_file: str,
-        lang: str,
-        weights: Tuple[float, float, float, float] = (0.25, 0.25, 0.25, 0.25),
+    ref_files: List[str],
+    hyp_file: str,
+    lang: str,
+    weights: Tuple[float, float, float, float] = (0.25, 0.25, 0.25, 0.25),
 ) -> None:
-    pre_references = [[x.strip() for x in open(file, 'r', encoding='utf-8').readlines()] \
-                      for file in ref_files]
-    hypothesis = [x.strip() for x in open(hyp_file, 'r', encoding='utf-8').readlines()]
+    pre_references = [[x.strip() for x in open(file, "r", encoding="utf-8").readlines()] for file in ref_files]
+    hypothesis = [x.strip() for x in open(hyp_file, "r", encoding="utf-8").readlines()]
 
     for i in range(len(pre_references)):
         assert len(hypothesis) == len(pre_references[i])
@@ -46,27 +45,21 @@ def main(
         f"dataflow_match: {code_bleu_score['dataflow_match_score']}",
     )
 
-    print("CodeBLEU score: ", code_bleu_score['codebleu'])
+    print("CodeBLEU score: ", code_bleu_score["codebleu"])
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        "--refs", type=str, nargs="+", required=True, help="reference files"
-    )
-    parser.add_argument(
-        "--hyp", type=str, required=True, help="hypothesis file"
-    )
+    parser.add_argument("--refs", type=str, nargs="+", required=True, help="reference files")
+    parser.add_argument("--hyp", type=str, required=True, help="hypothesis file")
     parser.add_argument(
         "--lang",
         type=str,
         required=True,
         choices=["java", "js", "c_sharp", "php", "go", "python", "ruby"],
     )
-    parser.add_argument(
-        "--params", type=str, default="0.25,0.25,0.25,0.25", help="alpha, beta and gamma"
-    )
+    parser.add_argument("--params", type=str, default="0.25,0.25,0.25,0.25", help="alpha, beta and gamma")
 
     args = parser.parse_args()
 

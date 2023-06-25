@@ -21,7 +21,7 @@ def remove_comments_and_docstrings(source, lang):
             token_string = tok[1]
             start_line, start_col = tok[2]
             end_line, end_col = tok[3]
-            ltext = tok[4]
+            tok[4]
             if start_line > last_lineno:
                 last_col = 0
             if start_col > last_col:
@@ -70,8 +70,7 @@ def remove_comments_and_docstrings(source, lang):
 
 def tree_to_token_index(root_node):
     if (
-        len(root_node.children) == 0
-        or root_node.type in ["string_literal", "string", "character_literal"]
+        len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":
         return [(root_node.start_point, root_node.end_point)]
     else:
@@ -83,8 +82,7 @@ def tree_to_token_index(root_node):
 
 def tree_to_variable_index(root_node, index_to_code):
     if (
-        len(root_node.children) == 0
-        or root_node.type in ["string_literal", "string", "character_literal"]
+        len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":
         index = (root_node.start_point, root_node.end_point)
         _, code = index_to_code[index]

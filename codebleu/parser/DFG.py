@@ -13,8 +13,7 @@ def DFG_python(root_node, index_to_code, states):
     def_statement = ["default_parameter"]
     states = states.copy()
     if (
-        len(root_node.children) == 0
-        or root_node.type in ["string_literal", "string", "character_literal"]
+        len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":
         idx, code = index_to_code[(root_node.start_point, root_node.end_point)]
         if root_node.type == code:
@@ -55,16 +54,8 @@ def DFG_python(root_node, index_to_code, states):
         else:
             if root_node.child_by_field_name("right") is None:
                 return [], states
-            left_nodes = [
-                x
-                for x in root_node.child_by_field_name("left").children
-                if x.type != ","
-            ]
-            right_nodes = [
-                x
-                for x in root_node.child_by_field_name("right").children
-                if x.type != ","
-            ]
+            left_nodes = [x for x in root_node.child_by_field_name("left").children if x.type != ","]
+            right_nodes = [x for x in root_node.child_by_field_name("right").children if x.type != ","]
             if len(right_nodes) != len(left_nodes):
                 left_nodes = [root_node.child_by_field_name("left")]
                 right_nodes = [root_node.child_by_field_name("right")]
@@ -128,16 +119,8 @@ def DFG_python(root_node, index_to_code, states):
     elif root_node.type in for_statement:
         DFG = []
         for i in range(2):
-            right_nodes = [
-                x
-                for x in root_node.child_by_field_name("right").children
-                if x.type != ","
-            ]
-            left_nodes = [
-                x
-                for x in root_node.child_by_field_name("left").children
-                if x.type != ","
-            ]
+            right_nodes = [x for x in root_node.child_by_field_name("right").children if x.type != ","]
+            left_nodes = [x for x in root_node.child_by_field_name("left").children if x.type != ","]
             if len(right_nodes) != len(left_nodes):
                 left_nodes = [root_node.child_by_field_name("left")]
                 right_nodes = [root_node.child_by_field_name("right")]
@@ -173,16 +156,9 @@ def DFG_python(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in while_statement:
         DFG = []
@@ -195,16 +171,9 @@ def DFG_python(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     else:
         DFG = []
@@ -231,8 +200,7 @@ def DFG_java(root_node, index_to_code, states):
     do_first_statement = []
     states = states.copy()
     if (
-        len(root_node.children) == 0
-        or root_node.type in ["string_literal", "string", "character_literal"]
+        len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":
         idx, code = index_to_code[(root_node.start_point, root_node.end_point)]
         if root_node.type == code:
@@ -340,16 +308,9 @@ def DFG_java(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in enhanced_for_statement:
         name = root_node.child_by_field_name("name")
@@ -374,16 +335,9 @@ def DFG_java(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in while_statement:
         DFG = []
@@ -396,16 +350,9 @@ def DFG_java(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     else:
         DFG = []
@@ -432,8 +379,7 @@ def DFG_csharp(root_node, index_to_code, states):
     do_first_statement = []
     states = states.copy()
     if (
-        len(root_node.children) == 0
-        or root_node.type in ["string_literal", "string", "character_literal"]
+        len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":
         idx, code = index_to_code[(root_node.start_point, root_node.end_point)]
         if root_node.type == code:
@@ -545,16 +491,9 @@ def DFG_csharp(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in enhanced_for_statement:
         name = root_node.child_by_field_name("left")
@@ -579,16 +518,9 @@ def DFG_csharp(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in while_statement:
         DFG = []
@@ -601,16 +533,9 @@ def DFG_csharp(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     else:
         DFG = []
@@ -634,8 +559,7 @@ def DFG_ruby(root_node, index_to_code, states):
     do_first_statement = []
     def_statement = ["keyword_parameter"]
     if (
-        len(root_node.children) == 0
-        or root_node.type in ["string_literal", "string", "character_literal"]
+        len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":
         states = states.copy()
         idx, code = index_to_code[(root_node.start_point, root_node.end_point)]
@@ -671,12 +595,8 @@ def DFG_ruby(root_node, index_to_code, states):
                 states[code1] = [idx1]
             return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in assignment:
-        left_nodes = [
-            x for x in root_node.child_by_field_name("left").children if x.type != ","
-        ]
-        right_nodes = [
-            x for x in root_node.child_by_field_name("right").children if x.type != ","
-        ]
+        left_nodes = [x for x in root_node.child_by_field_name("left").children if x.type != ","]
+        right_nodes = [x for x in root_node.child_by_field_name("right").children if x.type != ","]
         if len(right_nodes) != len(left_nodes):
             left_nodes = [root_node.child_by_field_name("left")]
             right_nodes = [root_node.child_by_field_name("right")]
@@ -767,25 +687,16 @@ def DFG_ruby(root_node, index_to_code, states):
                     )
                     states[code1] = [idx1]
                 DFG += temp
-            temp, states = DFG_ruby(
-                root_node.child_by_field_name("body"), index_to_code, states
-            )
+            temp, states = DFG_ruby(root_node.child_by_field_name("body"), index_to_code, states)
             DFG += temp
         dic = {}
         for x in DFG:
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in while_statement:
         DFG = []
@@ -798,16 +709,9 @@ def DFG_ruby(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     else:
         DFG = []
@@ -831,13 +735,10 @@ def DFG_go(root_node, index_to_code, states):
     increment_statement = ["inc_statement"]
     if_statement = ["if_statement", "else"]
     for_statement = ["for_statement"]
-    enhanced_for_statement = []
-    while_statement = []
     do_first_statement = []
     states = states.copy()
     if (
-        len(root_node.children) == 0
-        or root_node.type in ["string_literal", "string", "character_literal"]
+        len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":
         idx, code = index_to_code[(root_node.start_point, root_node.end_point)]
         if root_node.type == code:
@@ -945,9 +846,7 @@ def DFG_go(root_node, index_to_code, states):
                 DFG += temp
             elif child.type == "for_clause":
                 if child.child_by_field_name("update") is not None:
-                    temp, states = DFG_go(
-                        child.child_by_field_name("update"), index_to_code, states
-                    )
+                    temp, states = DFG_go(child.child_by_field_name("update"), index_to_code, states)
                     DFG += temp
                 flag = True
         dic = {}
@@ -955,16 +854,9 @@ def DFG_go(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     else:
         DFG = []
@@ -991,8 +883,7 @@ def DFG_php(root_node, index_to_code, states):
     do_first_statement = []
     states = states.copy()
     if (
-        len(root_node.children) == 0
-        or root_node.type in ["string_literal", "string", "character_literal"]
+        len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":
         idx, code = index_to_code[(root_node.start_point, root_node.end_point)]
         if root_node.type == code:
@@ -1056,12 +947,11 @@ def DFG_php(root_node, index_to_code, states):
         current_states = states.copy()
         others_states = []
         flag = False
-        tag = False
         if "else" in root_node.type:
-            tag = True
+            pass
         for child in root_node.children:
             if "else" in child.type:
-                tag = True
+                pass
             if child.type not in if_statement and flag is False:
                 temp, current_states = DFG_php(child, index_to_code, current_states)
                 DFG += temp
@@ -1103,16 +993,9 @@ def DFG_php(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in enhanced_for_statement:
         name = None
@@ -1143,16 +1026,9 @@ def DFG_php(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in while_statement:
         DFG = []
@@ -1165,16 +1041,9 @@ def DFG_php(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     else:
         DFG = []
@@ -1196,13 +1065,11 @@ def DFG_javascript(root_node, index_to_code, states):
     increment_statement = ["update_expression"]
     if_statement = ["if_statement", "else"]
     for_statement = ["for_statement"]
-    enhanced_for_statement = []
     while_statement = ["while_statement"]
     do_first_statement = []
     states = states.copy()
     if (
-        len(root_node.children) == 0
-        or root_node.type in ["string_literal", "string", "character_literal"]
+        len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":
         idx, code = index_to_code[(root_node.start_point, root_node.end_point)]
         if root_node.type == code:
@@ -1273,9 +1140,7 @@ def DFG_javascript(root_node, index_to_code, states):
             if "else" in child.type:
                 tag = True
             if child.type not in if_statement and flag is False:
-                temp, current_states = DFG_javascript(
-                    child, index_to_code, current_states
-                )
+                temp, current_states = DFG_javascript(child, index_to_code, current_states)
                 DFG += temp
             else:
                 flag = True
@@ -1317,16 +1182,9 @@ def DFG_javascript(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in while_statement:
         DFG = []
@@ -1339,16 +1197,9 @@ def DFG_javascript(root_node, index_to_code, states):
             if (x[0], x[1], x[2]) not in dic:
                 dic[(x[0], x[1], x[2])] = [x[3], x[4]]
             else:
-                dic[(x[0], x[1], x[2])][0] = list(
-                    set(dic[(x[0], x[1], x[2])][0] + x[3])
-                )
-                dic[(x[0], x[1], x[2])][1] = sorted(
-                    list(set(dic[(x[0], x[1], x[2])][1] + x[4]))
-                )
-        DFG = [
-            (x[0], x[1], x[2], y[0], y[1])
-            for x, y in sorted(dic.items(), key=lambda t: t[0][1])
-        ]
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
         return sorted(DFG, key=lambda x: x[1]), states
     else:
         DFG = []

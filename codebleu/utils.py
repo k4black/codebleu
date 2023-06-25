@@ -18,7 +18,8 @@ def pad_sequence(
 ):
     """
     Returns a padded sequence of items before ngram extraction.
-        >>> list(pad_sequence([1,2,3,4,5], 2, pad_left=True, pad_right=True, left_pad_symbol='<s>', right_pad_symbol='</s>'))
+        >>> list(pad_sequence([1,2,3,4,5], 2, pad_left=True, pad_right=True,
+        >>>      left_pad_symbol='<s>', right_pad_symbol='</s>'))
         ['<s>', 1, 2, 3, 4, 5, '</s>']
         >>> list(pad_sequence([1,2,3,4,5], 2, pad_left=True, left_pad_symbol='<s>'))
         ['<s>', 1, 2, 3, 4, 5]
@@ -87,9 +88,7 @@ def ngrams(
     :type right_pad_symbol: any
     :rtype: sequence or iter
     """
-    sequence = pad_sequence(
-        sequence, n, pad_left, pad_right, left_pad_symbol, right_pad_symbol
-    )
+    sequence = pad_sequence(sequence, n, pad_left, pad_right, left_pad_symbol, right_pad_symbol)
 
     history = []
     while n > 1:

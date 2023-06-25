@@ -86,7 +86,7 @@ def get_data_flow(code, parser):
             index_to_code[index] = (idx, code)
         try:
             DFG, _ = parser[1](root_node, index_to_code, {})
-        except:
+        except Exception:
             DFG = []
         DFG = sorted(DFG, key=lambda x: x[1])
         indexs = set()
@@ -99,10 +99,9 @@ def get_data_flow(code, parser):
         for d in DFG:
             if d[1] in indexs:
                 new_DFG.append(d)
-        codes = code_tokens
         dfg = new_DFG
-    except:
-        codes = code.split()
+    except Exception:
+        code.split()
         dfg = []
     # merge nodes
     dic = {}
@@ -126,10 +125,10 @@ def get_data_flow(code, parser):
 
 def normalize_dataflow_item(dataflow_item):
     var_name = dataflow_item[0]
-    var_pos = dataflow_item[1]
+    dataflow_item[1]
     relationship = dataflow_item[2]
     par_vars_name_list = dataflow_item[3]
-    par_vars_pos_list = dataflow_item[4]
+    dataflow_item[4]
 
     var_names = list(set(par_vars_name_list + [var_name]))
     norm_names = {}

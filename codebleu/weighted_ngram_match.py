@@ -16,7 +16,6 @@ import math
 import sys
 import warnings
 from collections import Counter
-from fractions import Fraction
 
 from .bleu import modified_precision
 from .utils import ngrams
@@ -86,9 +85,7 @@ def sentence_bleu(
     :return: The sentence-level BLEU score.
     :rtype: float
     """
-    return corpus_bleu(
-        [references], [hypothesis], weights, smoothing_function, auto_reweigh
-    )
+    return corpus_bleu([references], [hypothesis], weights, smoothing_function, auto_reweigh)
 
 
 def corpus_bleu(
@@ -194,9 +191,7 @@ def corpus_bleu(
     # Note: smoothing_function() may convert values into floats;
     #       it tries to retain the Fraction object as much as the
     #       smoothing method allows.
-    p_n = smoothing_function(
-        p_n, references=references, hypothesis=hypothesis, hyp_len=hyp_lengths
-    )
+    p_n = smoothing_function(p_n, references=references, hypothesis=hypothesis, hyp_len=hyp_lengths)
     # pdb.set_trace()
     s = (w_i * math.log(p_i[0] / p_i[1]) for w_i, p_i in zip(weights, p_n))
     s = bp * math.exp(math.fsum(s))
@@ -224,28 +219,20 @@ def modified_recall(references, hypothesis, n):
     counts = Counter(ngrams(hypothesis, n)) if len(hypothesis) >= n else Counter()
     # Extract a union of references' counts.
     # max_counts = reduce(or_, [Counter(ngrams(ref, n)) for ref in references])
-    max_counts = {}
     for reference_and_weights in references:
         reference = reference_and_weights[0]
         weights = reference_and_weights[1]
-        reference_counts = (
-            Counter(ngrams(reference, n)) if len(reference) >= n else Counter()
-        )
+        reference_counts = Counter(ngrams(reference, n)) if len(reference) >= n else Counter()
         # for ngram in reference_counts:
         #     max_counts[ngram] = max(max_counts.get(ngram, 0), counts[ngram])
-        clipped_counts = {
-            ngram: min(count, counts[ngram])
-            for ngram, count in reference_counts.items()
-        }
+        clipped_counts = {ngram: min(count, counts[ngram]) for ngram, count in reference_counts.items()}
         # reweight
         if n == 1 and len(weights) == len(reference_counts):
 
             def weighted_sum(weights, counts):
                 sum_counts = 0
                 for ngram, count in counts.items():
-                    sum_counts += count * (
-                        weights[ngram[0]] if ngram[0] in weights else 1
-                    )
+                    sum_counts += count * (weights[ngram[0]] if ngram[0] in weights else 1)
                 return sum_counts
 
             numerator += weighted_sum(weights, clipped_counts)
@@ -282,9 +269,7 @@ def closest_ref_length(references, hyp_len):
     :rtype: int
     """
     ref_lens = (len(reference) for reference in references)
-    closest_ref_len = min(
-        ref_lens, key=lambda ref_len: (abs(ref_len - hyp_len), ref_len)
-    )
+    closest_ref_len = min(ref_lens, key=lambda ref_len: (abs(ref_len - hyp_len), ref_len))
     return closest_ref_len
 
 
@@ -446,9 +431,7 @@ class SmoothingFunction:
         """
         Smoothing method 1: Add *epsilon* counts to precision with 0 counts.
         """
-        return [
-            ((p_i[0] + self.epsilon), p_i[1]) if p_i[0] == 0 else p_i for p_i in p_n
-        ]
+        return [((p_i[0] + self.epsilon), p_i[1]) if p_i[0] == 0 else p_i for p_i in p_n]
 
     def method2(self, p_n, *args, **kwargs):
         """
@@ -492,9 +475,7 @@ class SmoothingFunction:
         hyp_len = hyp_len if hyp_len else len(hypothesis)
         for i, p_i in enumerate(p_n):
             if p_i.numerator == 0 and hyp_len != 0:
-                incvnt = i + 1 * self.k / math.log(
-                    hyp_len
-                )  # Note that this K is different from the K from NIST.
+                incvnt = i + 1 * self.k / math.log(hyp_len)  # Note that this K is different from the K from NIST.
                 p_n[i] = incvnt / p_i.denominator
         return p_n
 
@@ -537,9 +518,9 @@ class SmoothingFunction:
                 # No. of ngrams in translation that matches the reference.
                 m = p_i.numerator
                 # No. of ngrams in translation.
-                l = sum(1 for _ in ngrams(hypothesis, i + 1))
+                ngrams_count = sum(1 for _ in ngrams(hypothesis, i + 1))
                 # Calculates the interpolated precision.
-                p_n[i] = (m + self.alpha * pi0) / (l + self.alpha)
+                p_n[i] = (m + self.alpha * pi0) / (ngrams_count + self.alpha)
         return p_n
 
     def method7(self, p_n, references, hypothesis, hyp_len=None, *args, **kwargs):
