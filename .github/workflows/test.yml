@@ -46,7 +46,7 @@ jobs:
         run: python -m pytest
 
   external-build-workflow:
-    needs: [fast-test-python]
+    needs: [fast-tests-python]
     uses: ./.github/workflows/build.yml
     with:
       CIBW_SKIP: "pp* cp36-* cp37-*"
@@ -54,7 +54,7 @@ jobs:
     secrets: inherit
 
   full-tests-python:
-    needs: [fast-test-python, external-build-workflow]
+    needs: [fast-tests-python, external-build-workflow]
     strategy:
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11']
