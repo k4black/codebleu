@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/k4black/codebleu/branch/main/graph/badge.svg?token=60BIFPWRCE)](https://codecov.io/gh/k4black/codebleu)
 
 
-Unofficial `CodeBLEU` implementation with Linux and MacOS suppors available with PyPI and HF HUB.
+Unofficial `CodeBLEU` implementation with Linux and MacOS supports available with PyPI and HF HUB.
 
 Based on original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) code -- refactored, build for macos, tested and fixed multiple crutches to make it more usable.
 
@@ -15,7 +15,7 @@ Based on original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tr
 
 > An ideal evaluation metric should consider the grammatical correctness and the logic correctness.
 > We propose weighted n-gram match and syntactic AST match to measure grammatical correctness, and introduce semantic data-flow match to calculate logic correctness.
-> ![CodeBLEU](CodeBLEU.jpg)
+> ![CodeBLEU](CodeBLEU.jpg)  
 (from [CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) repo)
 
 In a nutshell, `CodeBLEU` is a weighted combination of `n-gram match (BLEU)`, `weighted n-gram match (BLEU-weighted)`, `AST match` and `data-flow match` scores.
@@ -28,11 +28,11 @@ The metric has shown higher correlation with human evaluation than `BLEU` and `a
 ```python
 from codebleu import calc_codebleu
 
-pred = "def add ( a , b ) :\n return a + b"
-ref = "def sum ( first , second ) :\n return second + first"
+prediction = "def add ( a , b ) :\n return a + b"
+reference = "def sum ( first , second ) :\n return second + first"
 
-res = calc_codebleu([ref], [pred], "python")
-print(res)
+result = calc_codebleu([reference], [prediction], lang="python", weights=(0.25, 0.25, 0.25, 0.25), tokenizer=None)
+print(result)
 # {
 #   'codebleu': 0.5537, 
 #   'ngram_match_score': 0.1041, 
@@ -42,11 +42,11 @@ print(res)
 # }
 ```
 where calc_codebleu takes the following arguments:
-- `refarences`: `list[str]` or `list[list[str]]` of reference codes
-- `predictions`: `list[str]` of predicted codes
-- `lang`: `str` of language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp, java at the moment)
-- `weights`: weights of the `ngram_match`, `weighted_ngram_match`, `syntax_match`, and `dataflow_match` respectively
-- `tokenizer`: `callable` to split code string to tokens, defaults to `s.split()`
+- `refarences` (`list[str]` or `list[list[str]]`): reference code
+- `predictions` (`list[str]`) predicted code
+- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp, java at the moment)
+- `weights` (tuple[float,float,float,float]): weights of the `ngram_match`, `weighted_ngram_match`, `syntax_match`, and `dataflow_match` respectively, defaults to `(0.25, 0.25, 0.25, 0.25)`
+- `tokenizer` (`callable`): to split code string to tokens, defaults to `s.split()`
 
 and outputs the `dict[str, float]` with following fields:
 - `codebleu`: the final `CodeBLEU` score
@@ -55,8 +55,15 @@ and outputs the `dict[str, float]` with following fields:
 - `syntax_match_score`: `syntax_match` score (AST match)
 - `dataflow_match_score`: `dataflow_match` score
 
+Alternatively, you can use `k4black/codebleu` from HuggingFace Spaces:
+```python
+import evaluate
+metric = evaluate.load("dvitel/codebleu")
 
-Or check the HF Space with online example: [k4black/codebleu](https://huggingface.co/spaces/k4black/codebleu) 
+result = metric.compute([reference], [prediction], lang="python", weights=(0.25, 0.25, 0.25, 0.25))
+```
+
+Feel free to check the HF Space with online example: [k4black/codebleu](https://huggingface.co/spaces/k4black/codebleu) 
 
 ## Installation
 
@@ -67,13 +74,10 @@ The metrics can be installed with pip and used as indicated above:
 pip install codebleu
 ```
 
-TBA: 
 alternatively the metric is available as [k4black/codebleu](https://huggingface.co/spaces/k4black/codebleu) in `evaluate` (lib installation required):
 ```python
 import evaluate
 metric = evaluate.load("dvitel/codebleu")
-
-res = metric.compute([reference], [prediction], "python")
 ```
 
 ## Citation
