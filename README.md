@@ -4,26 +4,23 @@
 [![codecov](https://codecov.io/gh/k4black/codebleu/branch/main/graph/badge.svg?token=60BIFPWRCE)](https://codecov.io/gh/k4black/codebleu)
 
 
-Unofficial `CodeBLEU` implementation with pip and hf hub support.
-Based on [CodeXGLUE/code-to-code-trans/evaluator/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) implementation.
+Unofficial `CodeBLEU` implementation with Linux and MacOS suppors available with PyPI and HF HUB.
+
+Based on original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) code -- refactored, build for macos, tested and fixed multiple crutches to make it more usable.
 
 
 ---
 
-## Description
+## Metric Description
 
 > An ideal evaluation metric should consider the grammatical correctness and the logic correctness.
 > We propose weighted n-gram match and syntactic AST match to measure grammatical correctness, and introduce semantic data-flow match to calculate logic correctness.
 > ![CodeBLEU](CodeBLEU.jpg)
-(from [CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU))
+(from [CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) repo)
 
 In a nutshell, `CodeBLEU` is a weighted combination of `n-gram match (BLEU)`, `weighted n-gram match (BLEU-weighted)`, `AST match` and `data-flow match` scores.
 
 The metric has shown higher correlation with human evaluation than `BLEU` and `accuracy` metrics.
-
---- 
-
-This repository refactor the original implementation to make it more usable and comparable with pip and hf hub.
 
 
 ## Usage 
@@ -59,6 +56,8 @@ and outputs the `dict[str, float]` with following fields:
 - `dataflow_match_score`: `dataflow_match` score
 
 
+Or check the HF Space with online example: [k4black/codebleu](https://huggingface.co/spaces/k4black/codebleu) 
+
 ## Installation
 
 Requires Python 3.8+
@@ -69,23 +68,12 @@ pip install codebleu
 ```
 
 TBA: 
-alternatively the metric is available as [k4black/codebleu]() in `evaluate` (lib installation required):
+alternatively the metric is available as [k4black/codebleu](https://huggingface.co/spaces/k4black/codebleu) in `evaluate` (lib installation required):
 ```python
 import evaluate
 metric = evaluate.load("dvitel/codebleu")
 
-pred = "def add ( a , b ) :\n return a + b"
-ref = "def sum ( first , second ) :\n return second + first"
-
-res = metric.compute([ref], [pred], "python")
-print(res)
-# {
-#   'codebleu': 0.5537, 
-#   'ngram_match_score': 0.1041, 
-#   'weighted_ngram_match_score': 0.1109, 
-#   'syntax_match_score': 1.0, 
-#   'dataflow_match_score': 1.0
-# }
+res = metric.compute([reference], [prediction], "python")
 ```
 
 ## Citation
