@@ -2,6 +2,7 @@
 [![Publish](https://github.com/k4black/codebleu/actions/workflows/publish.yml/badge.svg)](https://github.com/k4black/codebleu/actions/workflows/publish.yml)
 [![Test](https://github.com/k4black/codebleu/actions/workflows/test.yml/badge.svg)](https://github.com/k4black/codebleu/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/k4black/codebleu/branch/main/graph/badge.svg?token=60BIFPWRCE)](https://codecov.io/gh/k4black/codebleu)
+[![PyPI version](https://badge.fury.io/py/codebleu.svg)](https://badge.fury.io/py/codebleu)
 
 
 Unofficial `CodeBLEU` implementation with Linux and MacOS supports available with PyPI and HF HUB.
