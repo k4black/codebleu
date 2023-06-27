@@ -35,7 +35,8 @@ exclude = ["tests", "tests.*", "codebleu.parser.tree-sitter"]
 
 
 [tool.setuptools.package-data]
-"*" = ["py.typed", ".txt", "*.so", "*.dylib", "*.dll"]
+"*" = ["py.typed", "*.txt", "*.so", "*.dylib", "*.dll", "keywords/*"]
+
 
 
 [project.scripts]
