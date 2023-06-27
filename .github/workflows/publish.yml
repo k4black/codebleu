@@ -52,6 +52,7 @@ jobs:
     with:
       CIBW_SKIP: "pp* cp36-* cp37-*"
       CIBW_BUILD: "cp*-macosx* cp*-manylinux*"
+      VERSION: ${{ github.ref_name }}
     secrets: inherit
 
   release-python-package:

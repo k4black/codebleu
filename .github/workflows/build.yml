@@ -9,6 +9,9 @@ on:
       CIBW_BUILD:
         required: true
         type: string
+      VERSION:
+        required: false
+        type: string
 
 jobs:
   build-wheels:
@@ -20,6 +23,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+      - name: Set correct version
+        if: ${{ inputs.VERSION != '' }}
+        run: echo -n "${{ inputs.VERSION }}" > VERSION
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.13.1
         with:
@@ -36,6 +42,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set correct version
+        if: ${{ inputs.VERSION != '' }}
+        run: echo -n "${{ inputs.VERSION }}" > VERSION
       - name: Build sdist
         run: pipx run build --sdist
       - uses: actions/upload-artifact@v3
