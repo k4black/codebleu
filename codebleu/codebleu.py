@@ -72,14 +72,14 @@ def calc_codebleu(
     # calculate dataflow match
     dataflow_match_score = dataflow_match.corpus_dataflow_match(references, hypothesis, lang, lang_so_file)
 
-    print(
-        "ngram match: {0}, weighted ngram match: {1}, syntax_match: {2}, dataflow_match: {3}".format(
-            ngram_match_score,
-            weighted_ngram_match_score,
-            syntax_match_score,
-            dataflow_match_score,
-        )
-    )
+    # print(
+    #     "ngram match: {0}, weighted ngram match: {1}, syntax_match: {2}, dataflow_match: {3}".format(
+    #         ngram_match_score,
+    #         weighted_ngram_match_score,
+    #         syntax_match_score,
+    #         dataflow_match_score,
+    #     )
+    # )
 
     code_bleu_score = (
         alpha * ngram_match_score
@@ -88,7 +88,7 @@ def calc_codebleu(
         + theta * (dataflow_match_score or 1)
     )
 
-    print("CodeBLEU score: ", code_bleu_score)
+    # print("CodeBLEU score: ", code_bleu_score)
 
     return {
         "codebleu": code_bleu_score,
