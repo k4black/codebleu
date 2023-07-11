@@ -1,3 +1,4 @@
+import inspect
 from typing import List, Any
 
 import pytest
@@ -42,8 +43,8 @@ def test_code_x_glue_readme_examples(predictions: List[Any], references: List[An
 
 
 @pytest.mark.parametrize(['predictions', 'references', 'codebleu'], [
-#     ([], [], 1.0),
-#     ([], [[]], 1.0),
+    # ([], [], 1.0),
+    # ([], [[]], 1.0),
     (['def foo ( x ) : pass'], ['def foo ( x ) : pass'], 1.0),
     (['def foo ( x ) : pass'], [['def foo ( x ) : pass']], 1.0),
     (['def foo ( x ) : pass'], [['def bar ( x ) : pass', 'def foo ( x ) : pass']], 0.95),
@@ -51,3 +52,58 @@ def test_code_x_glue_readme_examples(predictions: List[Any], references: List[An
 ])
 def test_input_variants(predictions: List[Any], references: List[Any], codebleu: float) -> None:
     assert calc_codebleu(references, predictions, 'python')['codebleu'] == pytest.approx(codebleu, 0.01)
+
+
+# TODO: fix this test
+# @pytest.mark.timeout(1)
+def test_finite_processing_time_in_bug_testcase() -> None:
+    dummy_true_code = inspect.cleandoc('''
+        def foo(n):
+            pass
+    ''')
+    generated_code = inspect.cleandoc('''
+        def foo(n):
+           for i in range(n):
+               for j in range(n):
+                   for k in range(n):
+                       for l in range(n):
+                           for m in range(n):
+                               for n in range(n):
+                                   for o in range(n):
+                                       for p in range(n):
+                                           for q in range(n):
+                                               for r in range(n):
+                                                   for s in range(n):
+                                                       for t in range(n):
+                                   #                         for u in range(n):
+                                   #                             for v in range(n):
+                                   #                                 for w in range(n):
+                                   #                                     for x in range(n):
+                                   #                                         for y in range(n):
+                                   #                                             for z in range(n):
+                                   #                                                 for a in range(n):
+                                   #                                                     for b in range(n):
+                                   #                                                         for c in range(n):
+                                   #                                                             for d in range(n):
+                                   #                                                               for e in range(n):
+                                   #                                                               for f in range(n):
+                                   #                                                               for g in range(n):
+                                   #                                                               for h in range(n):
+                                   #                                                               for i in range(n):
+                                   #                                                               for j in range(n):
+                                   #                                                               for k in range(n):
+                                   #                                                               for l in range(n):
+                                   #                                                               for m in range(n):
+                                   #                                                               for n in range(n):
+                                   #                                                               for o in range(n):
+                                   #                                                               for p in range(n):
+                                   #                                                               for q in range(n):
+                                   #                                                               for r in range(n):
+                                   #                                                               for s
+    ''')
+
+    # just test finite processing time
+    calc_codebleu([dummy_true_code], [generated_code], 'python')
+
+
+# TODO: add tests with direct comparison with XLCoST and CodeXGlue results

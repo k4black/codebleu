@@ -7,8 +7,8 @@ from typing import Callable, Dict, List, Optional, Tuple, Union
 from . import bleu, dataflow_match, syntax_match, weighted_ngram_match
 
 PACKAGE_DIR = Path(__file__).parent
-# AVAILABLE_LANGS = ['java', 'js', 'c_sharp', 'php', 'go', 'python', 'ruby']
-AVAILABLE_LANGS = ["java", "c_sharp", "python"]  # only keywords available
+# AVAILABLE_LANGS = ['java', 'javascript', 'c_sharp', 'php', 'go', 'python', 'ruby']
+AVAILABLE_LANGS = ['java', 'javascript', 'c_sharp', 'php', 'c', 'cpp', 'python']  # keywords available
 
 
 def calc_codebleu(
@@ -28,6 +28,8 @@ def calc_codebleu(
         lang: input language, one of AVAILABLE_LANGS
         weights: weights of the ngram_match, weighted_ngram_match, syntax_match, and dataflow_match respectively
         tokenizer: tokenizer function, Defaults to lambda s: s.split()
+        keywords_dir: path to the directory with keywords files
+        lang_so_file: path to the .so file with the parser for the language
 
     Return:
         Scores dict

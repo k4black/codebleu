@@ -9,6 +9,7 @@ Unofficial `CodeBLEU` implementation with Linux and MacOS supports available wit
 
 Based on original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) code -- refactored, build for macos, tested and fixed multiple crutches to make it more usable.
 
+Keywords for `C`, `C#`, `C++`, `JavaScript`, and `PHP` copied from updated version by [XLCoST/CodeBLEU](https://github.com/reddy-lab-code-research/XLCoST/tree/main/code/translation/evaluator/CodeBLEU).
 
 ---
 

@@ -5,5 +5,7 @@ git clone --depth=1 --single-branch https://github.com/tree-sitter/tree-sitter-r
 git clone --depth=1 --single-branch https://github.com/tree-sitter/tree-sitter-php tree-sitter/php
 git clone --depth=1 --single-branch https://github.com/tree-sitter/tree-sitter-java tree-sitter/java
 git clone --depth=1 --single-branch https://github.com/tree-sitter/tree-sitter-c-sharp tree-sitter/c-sharp
+git clone --depth=1 --single-branch https://github.com/tree-sitter/tree-sitter-c tree-sitter/c
+git clone --depth=1 --single-branch https://github.com/tree-sitter/tree-sitter-cpp tree-sitter/cpp
 python build.py
 #rm -rf tree-sitter

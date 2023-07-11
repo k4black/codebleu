@@ -24,6 +24,8 @@ dfg_function = {
     "php": DFG_php,
     "javascript": DFG_javascript,
     "c_sharp": DFG_csharp,
+    "c": DFG_csharp,  # XLCoST uses C# parser for C
+    "cpp": DFG_csharp,  # XLCoST uses C# parser for C++
 }
 
 
