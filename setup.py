@@ -1,8 +1,8 @@
-from setuptools import setup
 import subprocess
 from pathlib import Path
-from setuptools.dist import Distribution
 
+from setuptools import setup
+from setuptools.dist import Distribution
 
 ROOT = Path(__file__).parent
 

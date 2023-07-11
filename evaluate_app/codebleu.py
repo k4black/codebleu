@@ -13,10 +13,10 @@
 # limitations under the License.
 """TODO: Add a description here."""
 
-import evaluate
 import datasets
-from codebleu import calc_codebleu
+import evaluate
 
+from codebleu import calc_codebleu
 
 # TODO: Add BibTeX citation
 _CITATION = """\

@@ -8,7 +8,7 @@ from . import bleu, dataflow_match, syntax_match, weighted_ngram_match
 
 PACKAGE_DIR = Path(__file__).parent
 # AVAILABLE_LANGS = ['java', 'javascript', 'c_sharp', 'php', 'go', 'python', 'ruby']
-AVAILABLE_LANGS = ['java', 'javascript', 'c_sharp', 'php', 'c', 'cpp', 'python']  # keywords available
+AVAILABLE_LANGS = ["java", "javascript", "c_sharp", "php", "c", "cpp", "python"]  # keywords available
 
 
 def calc_codebleu(
@@ -34,8 +34,10 @@ def calc_codebleu(
     Return:
         Scores dict
     """
-
-    alpha, beta, gamma, theta = weights
+    assert lang in AVAILABLE_LANGS, f"Language {lang} is not supported (yet). Available languages: {AVAILABLE_LANGS}"
+    assert len(weights) == 4, "weights should be a tuple of 4 floats (alpha, beta, gamma, theta)"
+    assert keywords_dir.exists(), f"keywords_dir {keywords_dir} does not exist"
+    assert lang_so_file.exists(), f"lang_so_file {lang_so_file} does not exist"
 
     # preprocess inputs
     references = [[x.strip() for x in ref] if isinstance(ref, list) else [ref.strip()] for ref in references]
@@ -83,6 +85,7 @@ def calc_codebleu(
     #     )
     # )
 
+    alpha, beta, gamma, theta = weights
     code_bleu_score = (
         alpha * ngram_match_score
         + beta * weighted_ngram_match_score

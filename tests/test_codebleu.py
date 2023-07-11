@@ -1,9 +1,9 @@
 import inspect
-from typing import List, Any
+from typing import Any, List
 
 import pytest
 
-from codebleu.codebleu import calc_codebleu, AVAILABLE_LANGS
+from codebleu.codebleu import AVAILABLE_LANGS, calc_codebleu
 
 
 @pytest.mark.parametrize(['predictions', 'references', 'codebleu'], [
