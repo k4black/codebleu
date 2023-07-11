@@ -79,7 +79,7 @@ pip install codebleu
 alternatively the metric is available as [k4black/codebleu](https://huggingface.co/spaces/k4black/codebleu) in `evaluate` (lib installation required):
 ```python
 import evaluate
-metric = evaluate.load("dvitel/codebleu")
+metric = evaluate.load("k4black/codebleu")
 ```
 
 ## Citation

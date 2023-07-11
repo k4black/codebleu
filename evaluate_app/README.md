@@ -83,7 +83,7 @@ print(result)
 Or using `evaluate` library (package required):
 ```python
 import evaluate
-metric = evaluate.load("dvitel/codebleu")
+metric = evaluate.load("k4black/codebleu")
 
 prediction = "def add ( a , b ) :\n return a + b"
 reference = "def sum ( first , second ) :\n return second + first"
