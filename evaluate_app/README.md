@@ -37,8 +37,8 @@ The metric has shown higher correlation with human evaluation than `BLEU` and `a
 
 - `refarences` (`list[str]` or `list[list[str]]`): reference code
 - `predictions` (`list[str]`) predicted code
-- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp, java at the moment)
-- `weights` (tuple[float,float,float,float]): weights of the `ngram_match`, `weighted_ngram_match`, `syntax_match`, and `dataflow_match` respectively, defaults to `(0.25, 0.25, 0.25, 0.25)`
+- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp c, cpp, javascript, java, php at the moment)
+- `weights` (`tuple[float,float,float,float]`): weights of the `ngram_match`, `weighted_ngram_match`, `syntax_match`, and `dataflow_match` respectively, defaults to `(0.25, 0.25, 0.25, 0.25)`
 - `tokenizer` (`callable`): to split code string to tokens, defaults to `s.split()`
 
 
