@@ -5,11 +5,11 @@
 [![PyPI version](https://badge.fury.io/py/codebleu.svg)](https://badge.fury.io/py/codebleu)
 
 
-Unofficial `CodeBLEU` implementation with Linux and MacOS supports available with PyPI and HF HUB.
+This repository contains an unofficial `CodeBLEU` implementation that supports Linux and MacOS. It is available through `PyPI` and the `evaluate` library.
 
-Based on original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) code -- refactored, build for macos, tested and fixed multiple crutches to make it more usable.
+The code is based on the original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) and updated version by [XLCoST/CodeBLEU](https://github.com/reddy-lab-code-research/XLCoST/tree/main/code/translation/evaluator/CodeBLEU).  It has been refactored, tested, built for macOS, and multiple improvements have been made to enhance usability
 
-Keywords for `C`, `C#`, `C++`, `JavaScript`, and `PHP` copied from updated version by [XLCoST/CodeBLEU](https://github.com/reddy-lab-code-research/XLCoST/tree/main/code/translation/evaluator/CodeBLEU).
+Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`.
 
 ---
 
@@ -23,6 +23,21 @@ Keywords for `C`, `C#`, `C++`, `JavaScript`, and `PHP` copied from updated versi
 In a nutshell, `CodeBLEU` is a weighted combination of `n-gram match (BLEU)`, `weighted n-gram match (BLEU-weighted)`, `AST match` and `data-flow match` scores.
 
 The metric has shown higher correlation with human evaluation than `BLEU` and `accuracy` metrics.
+
+
+## Installation
+
+As this library require `so` file compilation it is platform dependent.  
+Currently available for `Linux` (manylinux) and `MacOS` with Python 3.8+.
+
+The metrics is available as [pip package](https://pypi.org/project/codebleu/) and can be installed as indicated above:
+```bash
+pip install codebleu
+```
+or directly from git repo:
+```bash
+pip install git+https://github.com/k4black/codebleu.git
+```
 
 
 ## Usage 
@@ -43,7 +58,7 @@ print(result)
 #   'dataflow_match_score': 1.0
 # }
 ```
-where calc_codebleu takes the following arguments:
+where `calc_codebleu` takes the following arguments:
 - `refarences` (`list[str]` or `list[list[str]]`): reference code
 - `predictions` (`list[str]`) predicted code
 - `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp c, cpp, javascript, java, php at the moment)
@@ -57,7 +72,7 @@ and outputs the `dict[str, float]` with following fields:
 - `syntax_match_score`: `syntax_match` score (AST match)
 - `dataflow_match_score`: `dataflow_match` score
 
-Alternatively, you can use `k4black/codebleu` from HuggingFace Spaces:
+Alternatively, you can use `k4black/codebleu` from HuggingFace Spaces (`codebleu` package required):
 ```python
 import evaluate
 metric = evaluate.load("dvitel/codebleu")
@@ -70,20 +85,17 @@ result = metric.compute([reference], [prediction], lang="python", weights=(0.25,
 
 Feel free to check the HF Space with online example: [k4black/codebleu](https://huggingface.co/spaces/k4black/codebleu) 
 
-## Installation
 
-Requires Python 3.8+
+## Contributing
 
-The metrics can be installed with pip and used as indicated above:
-```bash
-pip install codebleu
-```
+Contributions are welcome!  
+If you have any questions, suggestions, or bug reports, please open an issue on GitHub.
 
-alternatively the metric is available as [k4black/codebleu](https://huggingface.co/spaces/k4black/codebleu) in `evaluate` (lib installation required):
-```python
-import evaluate
-metric = evaluate.load("k4black/codebleu")
-```
+
+## License
+
+This project is licensed under the terms of the MIT license.
+
 
 ## Citation
 
