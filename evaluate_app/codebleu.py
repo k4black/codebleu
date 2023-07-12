@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """TODO: Add a description here."""
+import importlib
 
 import datasets
 import evaluate
 
-from codebleu import calc_codebleu
 
 # TODO: Add BibTeX citation
 _CITATION = """\
@@ -47,7 +47,7 @@ Args:
         should be a string with tokens separated by spaces.
     references: list of reference for each prediction. Each
         reference should be a string with tokens separated by spaces.
-    language: programming language in ['java','js','c_sharp','php','go','python','ruby'].
+    language: programming language in ['java','js','c_sharp','php','c','python','cpp'].
     weights: tuple of 4 floats to use as weights for scores. Defaults to (0.25, 0.25, 0.25, 0.25).
 Returns:
     codebleu: resulting `CodeBLEU` score,
@@ -110,12 +110,13 @@ class codebleu(evaluate.Metric):
 
     def _download_and_prepare(self, dl_manager):
         """Optional: download external resources useful to compute the scores"""
-        # TODO: Download external resources if needed
+        # workarounds as this file have to be named codebleu (evaluate library requirement)
+        self.codebleu_package = importlib.import_module('codebleu')
         pass
 
     def _compute(self, predictions, references, lang, weights=(0.25, 0.25, 0.25, 0.25), tokenizer=None):
         """Returns the scores"""
-        return calc_codebleu(
+        return self.codebleu_package.calc_codebleu(
             references=references,
             predictions=predictions,
             lang=lang,

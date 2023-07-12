@@ -11,9 +11,6 @@ license = {text = "MIT License"}
 authors = [
   {name = "Konstantin Chernyshev", email = "kdchernyshev@gmail.com"},
 ]
-urls = {
-  "Source Code" = "https://github.com/k4black/codebleu",
-}
 keywords = ["codebleu", "code", "bleu", "nlp", "natural language processing", "programming", "evaluate", "evaluation", "code generation", "matrics"]
 dynamic = ["version"]
 
