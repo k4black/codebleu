@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "codebleu"
-description = "Unofficial pip/hf compatible `CodeBLEU` implementation"
+description = "Unofficial CodeBLEU implementation that supports Linux and MacOS available on PyPI."
 readme = "README.md"
 license = {text = "MIT License"}
 authors = [
@@ -15,7 +15,7 @@ dynamic = ["version"]
 
 requires-python = ">=3.8"
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3 :: Only",
     "Typing :: Typed"
@@ -52,12 +52,12 @@ test = [
     "pytest-cov >=4.0.0,<5.0.0",
     "pytest-mock >=3.0.0,<4.0.0",
     "pytest-timeout >=2.0.0,<3.0.0",
-    "black ==23.3.0",
+    "black ==23.7.0",
     "mypy >=1.0.0,<2.0.0",
     "types-tree-sitter",
     "flake8 >=6.0.0,<7.0.0",
     "ruff >=0.0.275,<0.1.0",
-    "isort >=5.11.0,<6.0.0",
+    "isort >=5.0.0,<6.0.0",
 ]
 
 

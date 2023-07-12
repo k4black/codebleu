@@ -78,6 +78,7 @@ jobs:
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
           git clone https://k4black:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/k4black/codebleu hf_evaluate_codebleu
+          cd hf_evaluate_codebleu
           git checkout main
       - name: Update files and push
         run: |

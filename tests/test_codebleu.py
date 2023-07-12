@@ -20,9 +20,10 @@ def test_simple_cases(predictions: List[Any], references: List[Any], codebleu: f
 
 
 @pytest.mark.parametrize(['lang'], [(l,) for l in AVAILABLE_LANGS])
-def test_working_for_all_langs(lang: str) -> None:
+def test_exact_match_works_for_all_langs(lang: str) -> None:
     predictions = references = ['some matching string a couple of times']
     assert calc_codebleu(references, predictions, lang)['codebleu'] == 1.0
+
 
 @pytest.mark.parametrize(['predictions', 'references', 'codebleu'], [
     (
