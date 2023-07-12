@@ -18,7 +18,6 @@ import datasets
 import evaluate
 
 
-# TODO: Add BibTeX citation
 _CITATION = """\
 @misc{ren2020codebleu,
       title={CodeBLEU: a Method for Automatic Evaluation of Code Synthesis}, 
@@ -30,7 +29,6 @@ _CITATION = """\
 }
 """
 
-# TODO: Add description of the module here
 _DESCRIPTION = """\
 Unofficial `CodeBLEU` implementation with Linux and MacOS supports available with PyPI and HF HUB.
 
@@ -38,7 +36,6 @@ Based on original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tr
 """
 
 
-# TODO: Add description of the arguments of the module here
 _KWARGS_DESCRIPTION = """
 Calculate a weighted combination of `n-gram match (BLEU)`, `weighted n-gram match (BLEU-weighted)`, `AST match` and `data-flow match` scores.
 

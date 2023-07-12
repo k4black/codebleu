@@ -5,7 +5,7 @@ tags:
 - metric
 - code
 - codebleu
-description: "Unofficial `CodeBLEU` implementation with Linux and MacOS supports available with PyPI and HF HUB."
+description: "Unofficial `CodeBLEU` implementation that supports Linux and MacOS."
 sdk: gradio
 sdk_version: 3.19.1
 app_file: app.py
@@ -14,10 +14,13 @@ pinned: false
 
 # Metric Card for codebleu
 
-***Module Card Instructions:*** *Fill out the following subsections. Feel free to take a look at existing metric cards if you'd like examples.*
+This repository contains an unofficial `CodeBLEU` implementation that supports Linux and MacOS. It is available through `PyPI` and the `evaluate` library.
+
+The code is based on the original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) and updated version by [XLCoST/CodeBLEU](https://github.com/reddy-lab-code-research/XLCoST/tree/main/code/translation/evaluator/CodeBLEU).  It has been refactored, tested, built for macOS, and multiple improvements have been made to enhance usability
+
+Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`.
 
 ## Metric Description
-Unofficial `CodeBLEU` implementation with Linux and MacOS supports available with PyPI and HF HUB.  
 
 > An ideal evaluation metric should consider the grammatical correctness and the logic correctness.
 > We propose weighted n-gram match and syntactic AST match to measure grammatical correctness, and introduce semantic data-flow match to calculate logic correctness.
@@ -29,9 +32,6 @@ In a nutshell, `CodeBLEU` is a weighted combination of `n-gram match (BLEU)`, `w
 The metric has shown higher correlation with human evaluation than `BLEU` and `accuracy` metrics.
 
 ## How to Use
-*Give general statement of how to use the metric*
-
-*Provide simplest possible example for using the metric*
 
 ### Inputs
 
@@ -80,7 +80,7 @@ print(result)
 # }
 ```
 
-Or using `evaluate` library (package required):
+Or using `evaluate` library (`codebleu` package required):
 ```python
 import evaluate
 metric = evaluate.load("k4black/codebleu")
@@ -91,7 +91,7 @@ reference = "def sum ( first , second ) :\n return second + first"
 result = metric.compute([reference], [prediction], lang="python", weights=(0.25, 0.25, 0.25, 0.25), tokenizer=None)
 ```
 
-Note: `language` is required;
+Note: `lang` is required;
 
 
 ## Limitations and Bias
