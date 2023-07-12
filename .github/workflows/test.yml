@@ -95,23 +95,3 @@ jobs:
           flags: unittests # optional
           fail_ci_if_error: true # optional (default = false)
           verbose: true # optional (default = false)
-
-  sync-to-hf-hub:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download hf repo
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@users.noreply.github.com'
-          git clone https://k4black:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/k4black/codebleu hf_evaluate_codebleu
-          cd hf_evaluate_codebleu
-          git checkout main
-      - name: Update files and push
-        run: |
-          cp -r evaluate_app/* hf_evaluate_codebleu
-          cd hf_evaluate_codebleu
-          git add .
-          git commit --allow-empty -m "Auto files update [${{ github.ref_name }}]"
-          ls -lah
-          git push https://k4black:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/k4black/codebleu main

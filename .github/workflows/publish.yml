@@ -88,4 +88,3 @@ jobs:
           git commit --allow-empty -m "Auto files update [${{ github.ref_name }}]"
           ls -lah
           git push https://k4black:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/k4black/codebleu main
-

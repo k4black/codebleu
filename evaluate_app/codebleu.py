@@ -30,9 +30,7 @@ _CITATION = """\
 """
 
 _DESCRIPTION = """\
-Unofficial `CodeBLEU` implementation with Linux and MacOS supports available with PyPI and HF HUB.
-
-Based on original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) code -- refactored, build for macos, tested and fixed multiple crutches to make it more usable.
+Unofficial `CodeBLEU` implementation that supports Linux and MacOS.
 """
 
 
@@ -79,7 +77,7 @@ class codebleu(evaluate.Metric):
                     {
                         "predictions": datasets.Value("string", id="sequence"),
                         "references": datasets.Sequence(datasets.Value("string", id="sequence"), id="references"),
-                        # "lang": datasets.Value("string"),
+                        "lang": datasets.Value("string"),
                         # "weights": datasets.Value("string"),
                         # "tokenizer": datasets.Value("string"),
                     }
@@ -88,7 +86,7 @@ class codebleu(evaluate.Metric):
                     {
                         "predictions": datasets.Value("string", id="sequence"),
                         "references": datasets.Value("string", id="sequence"),
-                        # "lang": datasets.Value("string"),
+                        "lang": datasets.Value("string"),
                         # "weights": datasets.Value("string"),
                         # "tokenizer": datasets.Value("string"),
                     }
