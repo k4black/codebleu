@@ -34,6 +34,7 @@ def calc_codebleu(
     Return:
         Scores dict
     """
+    assert len(references) == len(predictions), "Number of references and predictions should be the same"
     assert lang in AVAILABLE_LANGS, f"Language {lang} is not supported (yet). Available languages: {AVAILABLE_LANGS}"
     assert len(weights) == 4, "weights should be a tuple of 4 floats (alpha, beta, gamma, theta)"
     assert keywords_dir.exists(), f"keywords_dir {keywords_dir} does not exist"
@@ -42,9 +43,6 @@ def calc_codebleu(
     # preprocess inputs
     references = [[x.strip() for x in ref] if isinstance(ref, list) else [ref.strip()] for ref in references]
     hypothesis = [x.strip() for x in predictions]
-
-    if not len(references) == len(hypothesis):
-        raise ValueError
 
     # calculate ngram match (BLEU)
     if tokenizer is None:

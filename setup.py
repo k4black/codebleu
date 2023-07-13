@@ -7,9 +7,10 @@ from setuptools.dist import Distribution
 ROOT = Path(__file__).parent
 
 
-subprocess.check_call(
+subprocess.run(
     ['bash', 'build.sh'],
-    cwd=ROOT / 'codebleu' / 'parser'
+    cwd=ROOT / 'codebleu' / 'parser',
+    check=True,
 )
 
 

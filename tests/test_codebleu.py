@@ -25,6 +25,31 @@ def test_exact_match_works_for_all_langs(lang: str) -> None:
     assert calc_codebleu(references, predictions, lang)['codebleu'] == 1.0
 
 
+@pytest.mark.parametrize(['lang', 'predictions', 'references'], [
+    ('python', ['def foo ( x ) :\n    return x'], ['def bar ( y ) :\n    return y']),
+    ('java', ['public function foo ( x ) { return x }'], ['public function bar ( y ) {\n   return y\n}']),
+    ('javascript', ['function foo ( x ) { return x }'], ['function bar ( y ) {\n   return y\n}']),
+    ('c', ['int foo ( int x ) { return x }'], ['int bar ( int y ) {\n   return y\n}']),
+    ('c_sharp', ['public int foo ( int x ) { return x }'], ['public int bar ( int y ) {\n   return y\n}']),
+    ('cpp', ['int foo ( int x ) { return x }'], ['int bar ( int y ) {\n   return y\n}']),
+    ('php', ['function foo ( x ) { return x }'], ['function bar ( y ) {\n   return y\n}']),
+])
+def test_simple_cases_work_for_all_langs(lang: str, predictions: List[Any], references: List[Any]) -> None:
+    result = calc_codebleu(references, predictions, lang)
+    print(result)
+    assert result['codebleu'] == pytest.approx(0.6, 0.1)
+
+
+def test_error_when_lang_not_supported() -> None:
+    with pytest.raises(AssertionError):
+        calc_codebleu(['def foo : pass'], ['def bar : pass'], 'not_supported_lang')
+
+
+def test_error_when_input_length_mismatch() -> None:
+    with pytest.raises(AssertionError):
+        calc_codebleu(['def foo : pass'], ['def bar : pass', 'def buz : pass'], 'python')
+
+
 @pytest.mark.parametrize(['predictions', 'references', 'codebleu'], [
     (
         ['public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? - 1 : 1) ; }'],
