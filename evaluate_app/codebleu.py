@@ -106,7 +106,7 @@ class codebleu(evaluate.Metric):
     def _download_and_prepare(self, dl_manager):
         """Optional: download external resources useful to compute the scores"""
         # workarounds as this file have to be named codebleu (evaluate library requirement)
-        self.codebleu_package = importlib.import_module('codebleu')
+        self.codebleu_package = importlib.import_module("codebleu")
         pass
 
     def _compute(self, predictions, references, lang, weights=(0.25, 0.25, 0.25, 0.25), tokenizer=None):

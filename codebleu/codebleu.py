@@ -7,7 +7,6 @@ from typing import Callable, Dict, List, Optional, Tuple, Union
 from . import bleu, dataflow_match, syntax_match, weighted_ngram_match
 
 PACKAGE_DIR = Path(__file__).parent
-# AVAILABLE_LANGS = ['java', 'javascript', 'c_sharp', 'php', 'go', 'python', 'ruby']
 AVAILABLE_LANGS = ["java", "javascript", "c_sharp", "php", "c", "cpp", "python"]  # keywords available
 
 
@@ -56,7 +55,8 @@ def calc_codebleu(
     ngram_match_score = bleu.corpus_bleu(tokenized_refs, tokenized_hyps)
 
     # calculate weighted ngram match
-    keywords = [x.strip() for x in open(keywords_dir / (lang + ".txt"), "r", encoding="utf-8").readlines()]
+    with open(keywords_dir / (lang + ".txt"), "r", encoding="utf-8") as f:
+        keywords = [x.strip() for x in f.readlines()]
 
     def make_weights(reference_tokens, key_word_list):
         return {token: 1 if token in key_word_list else 0.2 for token in reference_tokens}
@@ -74,24 +74,13 @@ def calc_codebleu(
     # calculate dataflow match
     dataflow_match_score = dataflow_match.corpus_dataflow_match(references, hypothesis, lang, lang_so_file)
 
-    # print(
-    #     "ngram match: {0}, weighted ngram match: {1}, syntax_match: {2}, dataflow_match: {3}".format(
-    #         ngram_match_score,
-    #         weighted_ngram_match_score,
-    #         syntax_match_score,
-    #         dataflow_match_score,
-    #     )
-    # )
-
     alpha, beta, gamma, theta = weights
     code_bleu_score = (
         alpha * ngram_match_score
         + beta * weighted_ngram_match_score
         + gamma * syntax_match_score
-        + theta * (dataflow_match_score or 1)
+        + theta * (dataflow_match_score or 0)
     )
-
-    # print("CodeBLEU score: ", code_bleu_score)
 
     return {
         "codebleu": code_bleu_score,

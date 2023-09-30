@@ -7,7 +7,8 @@ from codebleu.codebleu import AVAILABLE_LANGS, calc_codebleu
 
 
 @pytest.mark.parametrize(['predictions', 'references', 'codebleu'], [
-    (['some rannnndom words in length more than 3'], ['def test ( ) :\n pass'], 0.25),  # 'cause data_flow is 0 and considered as 1
+    (['some rannnndom words in length more than 3'],
+     ['def test ( ) :\n pass'], 0.25),  # 'cause data_flow is 0 and considered as 1
     (['def bar ( y , x ) :\n    a = x * x\n    return a'], ['def foo ( x ) :\n    return x'], 0.4),
     (['def foo ( x ) :\n    return x * x'], ['def bar ( x ) :\n    return x'], 0.6),
     (['def bar ( x ) :\n    return x'], ['def foo ( x ) :\n    return x'], 0.8),
@@ -19,7 +20,7 @@ def test_simple_cases(predictions: List[Any], references: List[Any], codebleu: f
     assert result['codebleu'] == pytest.approx(codebleu, 0.1)
 
 
-@pytest.mark.parametrize(['lang'], [(l,) for l in AVAILABLE_LANGS])
+@pytest.mark.parametrize(['lang'], [(lang,) for lang in AVAILABLE_LANGS])
 def test_exact_match_works_for_all_langs(lang: str) -> None:
     predictions = references = ['some matching string a couple of times']
     assert calc_codebleu(references, predictions, lang)['codebleu'] == 1.0
