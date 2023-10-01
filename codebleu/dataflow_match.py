@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
-
+import logging
 from tree_sitter import Language, Parser
 
 from .parser import (
@@ -67,7 +67,7 @@ def corpus_dataflow_match(references, candidates, lang, langso_so_file):
                         match_count += 1
                         normalized_cand_dfg.remove(dataflow)
     if total_count == 0:
-        print(
+        logging.warning(
             "WARNING: There is no reference data-flows extracted from the whole corpus, "
             "and the data-flow match score degenerates to 0. Please consider ignoring this score."
         )

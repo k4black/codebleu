@@ -192,7 +192,6 @@ def corpus_bleu(
     #       it tries to retain the Fraction object as much as the
     #       smoothing method allows.
     p_n = smoothing_function(p_n, references=references, hypothesis=hypothesis, hyp_len=hyp_lengths)
-    # pdb.set_trace()
     s = (w_i * math.log(p_i[0] / p_i[1]) for w_i, p_i in zip(weights, p_n))
     s = bp * math.exp(math.fsum(s))
     return s
@@ -212,7 +211,6 @@ def modified_recall(references, hypothesis, n):
     """
     # Extracts all ngrams in hypothesis
     # Set an empty Counter if hypothesis is empty.
-    # pdb.set_trace()
     numerator = 0
     denominator = 0
 

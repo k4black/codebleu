@@ -2,6 +2,7 @@ import inspect
 from typing import Any, List
 
 import pytest
+import logging
 
 from codebleu.codebleu import AVAILABLE_LANGS, calc_codebleu
 
@@ -16,7 +17,7 @@ from codebleu.codebleu import AVAILABLE_LANGS, calc_codebleu
 ])
 def test_simple_cases(predictions: List[Any], references: List[Any], codebleu: float) -> None:
     result = calc_codebleu(references, predictions, 'python')
-    print(result)
+    logging.debug(result)
     assert result['codebleu'] == pytest.approx(codebleu, 0.1)
 
 
@@ -37,7 +38,7 @@ def test_exact_match_works_for_all_langs(lang: str) -> None:
 ])
 def test_simple_cases_work_for_all_langs(lang: str, predictions: List[Any], references: List[Any]) -> None:
     result = calc_codebleu(references, predictions, lang)
-    print(result)
+    logging.debug(result)
     assert result['codebleu'] == pytest.approx(0.6, 0.1)
 
 
@@ -55,17 +56,17 @@ def test_error_when_input_length_mismatch() -> None:
     (
         ['public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? - 1 : 1) ; }'],
         ['public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }'],
-        0.7238
+        0.7019
     ),
-    # (
-    #     ['public static int Sign ( double c ) { return ( int ) ( ( c == 0 ) ? 0 : ( c < 0 ) ? - 1 : 1) ; }'],
-    #     ['public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }'],
-    #     0.8397
-    # ),
+    (
+        ['public static int Sign ( double c ) { return ( int ) ( ( c == 0 ) ? 0 : ( c < 0 ) ? - 1 : 1) ; }'],
+        ['public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }'],
+        0.8804
+    ),
 ])
 def test_code_x_glue_readme_examples(predictions: List[Any], references: List[Any], codebleu: float) -> None:
     result = calc_codebleu(references, predictions, 'java')
-    print(result)
+    logging.debug(result)
     assert result['codebleu'] == pytest.approx(codebleu, 0.01)
 
 

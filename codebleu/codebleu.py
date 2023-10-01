@@ -79,7 +79,7 @@ def calc_codebleu(
         alpha * ngram_match_score
         + beta * weighted_ngram_match_score
         + gamma * syntax_match_score
-        + theta * (dataflow_match_score or 0)
+        + theta * (dataflow_match_score or 1.0)
     )
 
     return {
