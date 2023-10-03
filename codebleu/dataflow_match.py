@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 import logging
+
 from tree_sitter import Language, Parser
 
 from .parser import (
