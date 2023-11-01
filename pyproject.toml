@@ -24,6 +24,7 @@ classifiers = [
 
 dependencies = [
     "tree-sitter >=0.20.0,<1.0.0",
+    "setuptools >=61.0.0",  # distutils removed in 3.12, but distutils.ccompiler used in tree-sitter
 ]
 
 [tool.setuptools]
