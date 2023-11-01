@@ -8,14 +8,24 @@
 # For license information, see LICENSE.TXT
 
 """BLEU score implementation."""
-
 import math
 import sys
 import warnings
 from collections import Counter
-from fractions import Fraction
+from fractions import Fraction as _Fraction
+from typing import Any
 
 from .utils import ngrams
+
+
+# _normalize=False was removed in 3.12, add custom class for back-compatibility
+class Fraction(_Fraction):
+    # We're immutable, so use __new__ not __init__
+    def __new__(cls, numerator: Any = 0, denominator: Any = None, *, _normalize: bool = True) -> "Fraction":
+        if sys.version_info >= (3, 12):
+            return super(Fraction, cls).__new__(cls, numerator, denominator)
+        else:
+            return super(Fraction, cls).__new__(cls, numerator, denominator, _normalize=False)
 
 
 def sentence_bleu(
