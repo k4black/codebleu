@@ -8,13 +8,12 @@
 # For license information, see LICENSE.TXT
 
 """BLEU score implementation."""
-from typing import Any
-
 import math
 import sys
 import warnings
 from collections import Counter
 from fractions import Fraction as _Fraction
+from typing import Any
 
 from .utils import ngrams
 
