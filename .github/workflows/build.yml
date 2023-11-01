@@ -22,7 +22,7 @@ jobs:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set correct version
         if: ${{ inputs.VERSION != '' }}
         run: echo -n "${{ inputs.VERSION }}" > VERSION
@@ -41,7 +41,7 @@ jobs:
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set correct version
         if: ${{ inputs.VERSION != '' }}
         run: echo -n "${{ inputs.VERSION }}" > VERSION
