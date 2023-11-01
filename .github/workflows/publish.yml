@@ -58,15 +58,17 @@ jobs:
   release-python-package:
     needs: [external-build-workflow, update-version-and-changelog]
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/codebleu
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
       - uses: actions/download-artifact@v3
         with:
           name: artifact  # if `name: artifact` is omitted, the action will create extra parent dir
           path: dist
-      # TODO: Trusted publishing
       - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_TOKEN }}
 
   sync-to-hf-hub:
     needs: update-version-and-changelog
