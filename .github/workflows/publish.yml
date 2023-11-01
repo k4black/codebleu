@@ -48,7 +48,7 @@ jobs:
 
   external-build-workflow:
     needs: update-version-and-changelog
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/reusable-build.yml
     with:
       CIBW_SKIP: "pp* cp36-* cp37-*"
       CIBW_BUILD: "cp*-macosx* cp*-manylinux*"
