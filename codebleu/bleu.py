@@ -18,8 +18,11 @@ from typing import Any
 from .utils import ngrams
 
 
-# _normalize=False was removed in 3.12, add custom class for back-compatibility
 class Fraction(_Fraction):
+    """Fraction class with _normalize=False support.
+    _normalize=False was removed in 3.12, add custom class for back-compatibility
+    """
+
     # We're immutable, so use __new__ not __init__
     def __new__(cls, numerator: Any = 0, denominator: Any = None, *, _normalize: bool = True) -> "Fraction":
         if sys.version_info >= (3, 12):

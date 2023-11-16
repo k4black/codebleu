@@ -30,11 +30,11 @@ def calc_syntax_match(references, candidate, lang, lang_so_file):
 
 
 def corpus_syntax_match(references, candidates, lang, lang_so_file):
-    # print(os.listdir())
-    JAVA_LANGUAGE = Language(lang_so_file, lang)
+    tree_sitter_language = Language(lang_so_file, lang)
     parser = Parser()
-    parser.set_language(JAVA_LANGUAGE)
+    parser.set_language(tree_sitter_language)
     match_count = 0
+    match_count_candidate_to_reference = 0
     total_count = 0
 
     for i in range(len(candidates)):
@@ -42,11 +42,11 @@ def corpus_syntax_match(references, candidates, lang, lang_so_file):
         candidate = candidates[i]
         for reference in references_sample:
             try:
-                candidate = remove_comments_and_docstrings(candidate, "java")
+                candidate = remove_comments_and_docstrings(candidate, lang)
             except Exception:
                 pass
             try:
-                reference = remove_comments_and_docstrings(reference, "java")
+                reference = remove_comments_and_docstrings(reference, lang)
             except Exception:
                 pass
 
@@ -69,14 +69,19 @@ def corpus_syntax_match(references, candidates, lang, lang_so_file):
                 return sub_tree_sexp_list
 
             cand_sexps = [x[0] for x in get_all_sub_trees(candidate_tree)]
-            ref_sexps = get_all_sub_trees(reference_tree)
+            ref_sexps = [x[0] for x in get_all_sub_trees(reference_tree)]
 
-            # print(cand_sexps)
-            # print(ref_sexps)
-
-            for sub_tree, depth in ref_sexps:
+            # TODO: fix, now we count number of reference subtrees matching candidate,
+            #       but we should count number of candidate subtrees matching reference
+            #       See (4) in "3.2 Syntactic AST Match" of https://arxiv.org/pdf/2009.10297.pdf
+            for sub_tree in ref_sexps:
                 if sub_tree in cand_sexps:
                     match_count += 1
+
+            for sub_tree in cand_sexps:
+                if sub_tree in ref_sexps:
+                    match_count_candidate_to_reference += 1
+
             total_count += len(ref_sexps)
 
     score = match_count / total_count
