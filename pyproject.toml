@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel", "tree-sitter>=0.20.0,<1.0.0"]
+requires = ["setuptools>=61.0.0", "wheel", "tree-sitter>=0.20.0,<1.0.0", "requests>=2.0.0,<3.0.0"]
 build-backend = "setuptools.build_meta"
 
 
@@ -11,7 +11,7 @@ license = {text = "MIT License"}
 authors = [
   {name = "Konstantin Chernyshev", email = "kdchernyshev@gmail.com"},
 ]
-keywords = ["codebleu", "code", "bleu", "nlp", "natural language processing", "programming", "evaluate", "evaluation", "code generation", "matrics"]
+keywords = ["codebleu", "code", "bleu", "nlp", "natural language processing", "programming", "evaluate", "evaluation", "code generation", "metrics"]
 dynamic = ["version"]
 
 requires-python = ">=3.8"
@@ -77,7 +77,7 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_unreachable = true
 allow_untyped_decorators = true
-exclude = ["codebleu/parser/tree-sitter", "codebleu/parser/tree-sitter/python"]
+exclude = ["codebleu/parser/tree-sitter", "codebleu/parser/tree-sitter/python", "tree_sitter"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -86,7 +86,7 @@ python_files = "test_*.py"
 addopts = "--cov=codebleu/ --cov-report term-missing"
 
 [tool.coverage.run]
-omit = ["tests/*", "codebleu/parser/tree-sitter/*"]
+omit = ["tests/*", "codebleu/parser/tree-sitter/*", "tree_sitter"]
 
 
 [tool.isort]
@@ -95,7 +95,7 @@ src_paths = ["codebleu", "tests"]
 known_first_party = ["codebleu", "tests"]
 line_length = 120
 combine_as_imports = true
-skip = ["build", "dist", ".venv", ".eggs", ".mypy_cache", ".pytest_cache", ".git", ".tox", ".nox", "codebleu/parser"]
+skip = ["build", "dist", ".venv", ".eggs", ".mypy_cache", ".pytest_cache", ".git", ".tox", ".nox", "codebleu/parser", "tree_sitter"]
 
 [tool.black]
 line_length=120

@@ -17,7 +17,7 @@ def calc_codebleu(
     weights: Tuple[float, float, float, float] = (0.25, 0.25, 0.25, 0.25),
     tokenizer: Optional[Callable] = None,
     keywords_dir: Path = PACKAGE_DIR / "keywords",
-    lang_so_file: Path = PACKAGE_DIR / "parser" / "my-languages.so",
+    lang_so_file: Path = PACKAGE_DIR / "my-languages.so",
 ) -> Dict[str, float]:
     """Calculate CodeBLEU score
 
