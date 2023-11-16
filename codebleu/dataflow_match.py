@@ -47,11 +47,11 @@ def corpus_dataflow_match(references, candidates, lang, langso_so_file):
         candidate = candidates[i]
         for reference in references_sample:
             try:
-                candidate = remove_comments_and_docstrings(candidate, "java")
+                candidate = remove_comments_and_docstrings(candidate, lang)
             except Exception:
                 pass
             try:
-                reference = remove_comments_and_docstrings(reference, "java")
+                reference = remove_comments_and_docstrings(reference, lang)
             except Exception:
                 pass
 

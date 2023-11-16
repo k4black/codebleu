@@ -40,13 +40,11 @@ exclude = ["tests", "tests.*", "codebleu.parser.tree-sitter"]
 "*" = ["py.typed", "*.txt", "*.so", "*.dylib", "*.dll", "keywords/*"]
 
 
-
 [project.scripts]
 codebleu = "codebleu.__main__:main"
 
 [project.urls]
 homepage = "https://github.com/k4black/codebleu"
-
 
 [project.optional-dependencies]
 test = [
@@ -60,9 +58,8 @@ test = [
     "flake8 >=6.0.0,<7.0.0",
     "ruff >=0.0.275,<0.2.0",
     "isort >=5.0.0,<6.0.0",
+    "nltk >=3.0.0,<4.0.0",
 ]
-
-
 
 [tool.setuptools.dynamic]
 version = {file = "VERSION"}
@@ -102,7 +99,7 @@ skip = ["build", "dist", ".venv", ".eggs", ".mypy_cache", ".pytest_cache", ".git
 
 [tool.black]
 line_length=120
-target_version=["py38","py39","py310","py311"]
+target_version=["py38","py39","py310","py311", "py312"]
 
 [tool.ruff]
 line-length=120

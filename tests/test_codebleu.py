@@ -10,21 +10,17 @@ from codebleu.codebleu import AVAILABLE_LANGS, calc_codebleu
 @pytest.mark.parametrize(
     ["predictions", "references", "codebleu"],
     [
-        (
-            ["some rannnndom words in length more than 3"],
-            ["def test ( ) :\n pass"],
-            0.25,
-        ),  # 'cause data_flow is 0 and considered as 1
-        (["def bar ( y , x ) :\n    a = x * x\n    return a"], ["def foo ( x ) :\n    return x"], 0.4),
-        (["def foo ( x ) :\n    return x * x"], ["def bar ( x ) :\n    return x"], 0.6),
-        (["def bar ( x ) :\n    return x"], ["def foo ( x ) :\n    return x"], 0.8),
+        (["some rannnndom words in length more than 3"], ["def test ( ) :\n pass"], 0.25),  # cause data_flow=1
+        (["def bar ( y , x ) :\n    a = x * x\n    return a"], ["def foo ( x ) :\n    return x"], 0.36),
+        (["def foo ( x ) :\n    return x * x"], ["def bar ( x ) :\n    return x"], 0.61),
+        (["def bar ( x ) :\n    return x"], ["def foo ( x ) :\n    return x"], 0.85),
         (["def foo ( x ) :\n    return x"], ["def foo ( x ) :\n    return x"], 1.0),
     ],
 )
 def test_simple_cases(predictions: List[Any], references: List[Any], codebleu: float) -> None:
     result = calc_codebleu(references, predictions, "python")
     logging.debug(result)
-    assert result["codebleu"] == pytest.approx(codebleu, 0.1)
+    assert result["codebleu"] == pytest.approx(codebleu, 0.01)
 
 
 @pytest.mark.parametrize(["lang"], [(lang,) for lang in AVAILABLE_LANGS])
@@ -48,7 +44,7 @@ def test_exact_match_works_for_all_langs(lang: str) -> None:
 def test_simple_cases_work_for_all_langs(lang: str, predictions: List[Any], references: List[Any]) -> None:
     result = calc_codebleu(references, predictions, lang)
     logging.debug(result)
-    assert result["codebleu"] == pytest.approx(0.6, 0.1)
+    assert result["codebleu"] == pytest.approx(0.6, 0.05)
 
 
 def test_error_when_lang_not_supported() -> None:
@@ -61,26 +57,57 @@ def test_error_when_input_length_mismatch() -> None:
         calc_codebleu(["def foo : pass"], ["def bar : pass", "def buz : pass"], "python")
 
 
-# https://github.com/microsoft/CodeXGLUE/blob/main/Code-Code/code-to-code-trans/example.png
 @pytest.mark.parametrize(
-    ["predictions", "references", "codebleu"],
+    ["predictions", "references", "bleu", "syntax_match", "dataflow_match", "codebleu"],
     [
-        # (
-        #     ['public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? - 1 : 1) ; }'],
-        #     ['public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }'],
-        #     0.7238  # TODO: lol, not working at <3.12
-        # ),
-        # (
-        #     ['public static int Sign ( double c ) { return ( int ) ( ( c == 0 ) ? 0 : ( c < 0 ) ? - 1 : 1) ; }'],
-        #     ['public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }'],
-        #     0.8397  # TODO: check, lol, not working
-        # ),
+        # https://github.com/microsoft/CodeXGLUE/blob/main/Code-Code/code-to-code-trans/example.png
+        (
+            ["public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? - 1 : 1) ; }"],
+            ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }"],
+            0.7846,
+            11/19,  # In example, it is 13/21, but with new version of tree-sitter it is 11/19
+            2/3,
+            0.7019,  # Should be 0.7238 if AST=13/21 in the paper, however at the moment tee-sitter AST is 11/19
+        ),
+        # https://arxiv.org/pdf/2009.10297.pdf "3.4 Two Examples" at the page 4
+        (
+            ["public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? - 1 : 1) ;"],
+            ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }"],
+            0.7543,
+            11/19,  # In example, it is 13/21, but with new version of tree-sitter it is 11/19
+            2/3,
+            0.6873,  # Should be 0.6973 if AST=13/21 in the paper, however at the moment tee-sitter AST is 11/19
+        ),
+        # https://arxiv.org/pdf/2009.10297.pdf "3.4 Two Examples" at the page 4
+        (
+            ["public static int Sign ( double c ) { return ( int ) ( ( c == 0 ) ? 0 : ( c < 0 ) ? - 1 : 1) ; }"],
+            ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }"],
+            0.7571,  # Error in the Figure 4, text "Example 2" states 0.7571, not 0.6814,
+            1.0,
+            1.0,
+            0.8804,  # Error in the Figure 4, text "Example 2" states 0.8804, not 0.8397,
+        ),
     ],
 )
-def test_code_x_glue_readme_examples(predictions: List[Any], references: List[Any], codebleu: float) -> None:
+def test_code_x_glue_readme_examples(
+    predictions: List[Any],
+    references: List[Any],
+    bleu: float,
+    syntax_match: float,
+    dataflow_match: float,
+    codebleu: float,
+) -> None:
     result = calc_codebleu(references, predictions, "java")
     logging.debug(result)
+
+    print(result)
+
+    assert result["ngram_match_score"] == pytest.approx(bleu, 0.01)
+    assert result["syntax_match_score"] == pytest.approx(syntax_match, 0.01)
+    assert result["dataflow_match_score"] == pytest.approx(dataflow_match, 0.01)
     assert result["codebleu"] == pytest.approx(codebleu, 0.01)
+
+    # assert False
 
 
 @pytest.mark.parametrize(
