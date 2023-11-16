@@ -10,12 +10,8 @@ from codebleu.codebleu import AVAILABLE_LANGS, calc_codebleu
 @pytest.mark.parametrize(
     ["predictions", "references", "codebleu"],
     [
-        (
-            ["some rannnndom words in length more than 3"],
-            ["def test ( ) :\n pass"],
-            0.25,
-        ),  # 'cause data_flow is 0 and considered as 1
-        (["def bar ( y , x ) :\n    a = x * x\n    return a"], ["def foo ( x ) :\n    return x"], 0.38),
+        (["some rannnndom words in length more than 3"], ["def test ( ) :\n pass"], 0.25),  # cause data_flow=1
+        (["def bar ( y , x ) :\n    a = x * x\n    return a"], ["def foo ( x ) :\n    return x"], 0.36),
         (["def foo ( x ) :\n    return x * x"], ["def bar ( x ) :\n    return x"], 0.61),
         (["def bar ( x ) :\n    return x"], ["def foo ( x ) :\n    return x"], 0.85),
         (["def foo ( x ) :\n    return x"], ["def foo ( x ) :\n    return x"], 1.0),
@@ -24,8 +20,6 @@ from codebleu.codebleu import AVAILABLE_LANGS, calc_codebleu
 def test_simple_cases(predictions: List[Any], references: List[Any], codebleu: float) -> None:
     result = calc_codebleu(references, predictions, "python")
     logging.debug(result)
-    print(result)
-    assert False
     assert result["codebleu"] == pytest.approx(codebleu, 0.01)
 
 

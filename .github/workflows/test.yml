@@ -45,7 +45,7 @@ jobs:
         run: |
           python -m pip install -e .[test]
       - name: Run tests
-        run: python -m pytest | true
+        run: python -m pytest
 
   external-build-workflow:
     needs: [fast-tests-python]
