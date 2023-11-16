@@ -24,6 +24,8 @@ from codebleu.codebleu import AVAILABLE_LANGS, calc_codebleu
 def test_simple_cases(predictions: List[Any], references: List[Any], codebleu: float) -> None:
     result = calc_codebleu(references, predictions, "python")
     logging.debug(result)
+    print(result)
+    assert False
     assert result["codebleu"] == pytest.approx(codebleu, 0.01)
 
 
