@@ -9,10 +9,7 @@
 
 """BLEU score implementation."""
 import math
-import sys
-import warnings
 from collections import Counter
-from typing import Any
 
 from .utils import ngrams
 

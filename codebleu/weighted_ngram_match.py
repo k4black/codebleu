@@ -13,11 +13,8 @@
 """BLEU score implementation."""
 
 import math
-import sys
-import warnings
 from collections import Counter
 
-from .bleu import modified_precision
 from .utils import ngrams
 
 
