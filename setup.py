@@ -6,24 +6,24 @@ import zipfile
 from pathlib import Path
 
 import requests
-from setuptools import setup, Extension
+from setuptools import setup
 from setuptools.dist import Distribution
-from tree_sitter import Language
 
+from tree_sitter import Language
 
 ROOT = Path(__file__).parent
 
 
 tree_sitter_languages = {
-    'go': 'https://github.com/tree-sitter/tree-sitter-go/archive/refs/tags/v0.20.0.zip',
-    'javascript': 'https://github.com/tree-sitter/tree-sitter-javascript/archive/refs/tags/v0.20.1.zip',
-    'python': 'https://github.com/tree-sitter/tree-sitter-python/archive/refs/tags/v0.20.4.zip',
-    'ruby': 'https://github.com/tree-sitter/tree-sitter-ruby/archive/refs/tags/v0.19.0.zip',
-    'php': 'https://github.com/tree-sitter/tree-sitter-php/archive/refs/tags/v0.19.0.zip',
-    'java': 'https://github.com/tree-sitter/tree-sitter-java/archive/refs/tags/v0.20.2.zip',
-    'c-sharp': 'https://github.com/tree-sitter/tree-sitter-c-sharp/archive/refs/tags/v0.20.0.zip',
-    'c': 'https://github.com/tree-sitter/tree-sitter-c/archive/refs/tags/v0.20.6.zip',
-    'cpp': 'https://github.com/tree-sitter/tree-sitter-cpp/archive/refs/tags/v0.20.3.zip',
+    "go": "https://github.com/tree-sitter/tree-sitter-go/archive/refs/tags/v0.20.0.zip",
+    "javascript": "https://github.com/tree-sitter/tree-sitter-javascript/archive/refs/tags/v0.20.1.zip",
+    "python": "https://github.com/tree-sitter/tree-sitter-python/archive/refs/tags/v0.20.4.zip",
+    "ruby": "https://github.com/tree-sitter/tree-sitter-ruby/archive/refs/tags/v0.19.0.zip",
+    "php": "https://github.com/tree-sitter/tree-sitter-php/archive/refs/tags/v0.19.0.zip",
+    "java": "https://github.com/tree-sitter/tree-sitter-java/archive/refs/tags/v0.20.2.zip",
+    "c-sharp": "https://github.com/tree-sitter/tree-sitter-c-sharp/archive/refs/tags/v0.20.0.zip",
+    "c": "https://github.com/tree-sitter/tree-sitter-c/archive/refs/tags/v0.20.6.zip",
+    "cpp": "https://github.com/tree-sitter/tree-sitter-cpp/archive/refs/tags/v0.20.3.zip",
 }
 
 
@@ -59,8 +59,8 @@ def build_tree_sitter_languages(languages: dict[str, str], languages_folder: Pat
 
 build_tree_sitter_languages(
     tree_sitter_languages,
-    ROOT / 'tree_sitter',
-    ROOT / 'codebleu' / "my-languages.so",
+    ROOT / "tree_sitter",
+    ROOT / "codebleu" / "my-languages.so",
 )
 
 
