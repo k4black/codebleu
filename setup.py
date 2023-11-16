@@ -8,14 +8,15 @@ ROOT = Path(__file__).parent
 
 
 subprocess.run(
-    ['bash', 'build.sh'],
-    cwd=ROOT / 'codebleu' / 'parser',
+    ["bash", "build.sh"],
+    cwd=ROOT / "codebleu" / "parser",
     check=True,
 )
 
 
 class PlatformSpecificDistribution(Distribution):
     """Distribution which always forces a binary package with platform name"""
+
     def has_ext_modules(self):
         return True
 
