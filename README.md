@@ -9,7 +9,7 @@ This repository contains an unofficial `CodeBLEU` implementation that supports `
 
 The code is based on the original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) and updated version by [XLCoST/CodeBLEU](https://github.com/reddy-lab-code-research/XLCoST/tree/main/code/translation/evaluator/CodeBLEU).  It has been refactored, tested, built for macOS, and multiple improvements have been made to enhance usability
 
-Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`.
+Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`, `Go` and `Ruby`.
 
 ---
 
