@@ -52,7 +52,7 @@ jobs:
     uses: ./.github/workflows/reusable-build.yml
     with:
       CIBW_SKIP: "pp* cp36-* cp37-*"
-      CIBW_BUILD: "cp*-macosx* cp*-manylinux*"
+      CIBW_BUILD: "cp*-macosx* cp*-manylinux* cp*-win*"
     secrets: inherit
 
   full-tests-python:
