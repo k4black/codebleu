@@ -78,13 +78,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip' # caching pip dependencies
-      - name: Remove sdist package
+      - name: Remove sdist package to force install wheel later
         run: |
           rm -rf ./dist/*.tar.gz
         shell: bash
-      - name: Install dependencies
+      - name: Install lib and dependencies
         run: |
           # force install package from local dist directory
+          pip uninstall -y codebleu || true
           # TODO: check the sdist package is not installed
           pip install --upgrade --no-deps --no-index --find-links=./dist codebleu
           # install dependencies for the package and tests
