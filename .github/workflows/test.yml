@@ -72,17 +72,20 @@ jobs:
           path: dist
       - name: Show dist files
         run: ls -lah ./dist
-        if: matrix.os != 'windows-latest'
+        shell: bash
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip' # caching pip dependencies
+      - name: Remove sdist package
+        run: |
+          rm -rf ./dist/*.tar.gz
+        shell: bash
       - name: Install dependencies
         run: |
           # force install package from local dist directory
           # TODO: check the sdist package is not installed
-          rm -rf ./dist/*.tar.gz || RMDIR /S ./dist/*.tar.gz  # unix or windows
           pip install --upgrade --no-deps --no-index --find-links=./dist codebleu
           # install dependencies for the package and tests
           pip install .[test]
