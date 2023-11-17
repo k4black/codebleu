@@ -4,6 +4,15 @@ codebleu/parser/*.so
 codebleu/parser/*.dylib
 codebleu/parser/*.dll
 
+/codebleu/parser/tree-sitter-c-sharp/
+/codebleu/parser/tree-sitter-go/
+/codebleu/parser/tree-sitter-java/
+/codebleu/parser/tree-sitter-javascript/
+/codebleu/parser/tree-sitter-php/
+/codebleu/parser/tree-sitter-python/
+/codebleu/parser/tree-sitter-ruby/
+/tree_sitter/
+codebleu/*.so
 
 
 # Byte-compiled / optimized / DLL files
@@ -166,10 +175,3 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
-/codebleu/parser/tree-sitter-c-sharp/
-/codebleu/parser/tree-sitter-go/
-/codebleu/parser/tree-sitter-java/
-/codebleu/parser/tree-sitter-javascript/
-/codebleu/parser/tree-sitter-php/
-/codebleu/parser/tree-sitter-python/
-/codebleu/parser/tree-sitter-ruby/
