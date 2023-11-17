@@ -8,7 +8,6 @@ from pathlib import Path
 import requests
 from setuptools import setup
 from setuptools.dist import Distribution
-
 from tree_sitter import Language
 
 ROOT = Path(__file__).parent
@@ -59,7 +58,7 @@ def build_tree_sitter_languages(languages: dict[str, str], languages_folder: Pat
 
 build_tree_sitter_languages(
     tree_sitter_languages,
-    ROOT / "tree_sitter",
+    ROOT / "tree_sitter_languages",
     ROOT / "codebleu" / "my-languages.so",
 )
 
