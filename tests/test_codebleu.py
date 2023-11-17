@@ -39,6 +39,8 @@ def test_exact_match_works_for_all_langs(lang: str) -> None:
         ("c_sharp", ["public int foo ( int x ) { return x }"], ["public int bar ( int y ) {\n   return y\n}"]),
         ("cpp", ["int foo ( int x ) { return x }"], ["int bar ( int y ) {\n   return y\n}"]),
         ("php", ["function foo ( x ) { return x }"], ["function bar ( y ) {\n   return y\n}"]),
+        ("go", ["func foo ( x ) { return x }"], ["func bar ( y ) {\n   return y\n}"]),
+        ("ruby", ["def foo(x)\n    return x\nend"], ["def bar(y)\n    return y\nend"])
     ],
 )
 def test_simple_cases_work_for_all_langs(lang: str, predictions: List[Any], references: List[Any]) -> None:
