@@ -5,7 +5,7 @@
 [![PyPI version](https://badge.fury.io/py/codebleu.svg)](https://badge.fury.io/py/codebleu)
 
 
-This repository contains an unofficial `CodeBLEU` implementation that supports Linux and MacOS. It is available through `PyPI` and the `evaluate` library.
+This repository contains an unofficial `CodeBLEU` implementation that supports `Linux`, `MacOS` and `Windows`. It is available through `PyPI` and the `evaluate` library.
 
 The code is based on the original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) and updated version by [XLCoST/CodeBLEU](https://github.com/reddy-lab-code-research/XLCoST/tree/main/code/translation/evaluator/CodeBLEU).  It has been refactored, tested, built for macOS, and multiple improvements have been made to enhance usability
 
@@ -28,7 +28,7 @@ The metric has shown higher correlation with human evaluation than `BLEU` and `a
 ## Installation
 
 As this library require `so` file compilation it is platform dependent.  
-Currently available for `Linux` (manylinux) and `MacOS` with Python 3.8+.
+Currently available for `Linux` (manylinux), `MacOS` and `Windows` with Python 3.8+.
 
 The metrics is available as [pip package](https://pypi.org/project/codebleu/) and can be installed as indicated above:
 ```bash

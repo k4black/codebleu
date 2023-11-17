@@ -41,7 +41,7 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip' # caching pip dependencies
-      - name: Install dependencies
+      - name: Install lib from source and dependencies
         run: |
           python -m pip install -e .[test]
       - name: Run tests

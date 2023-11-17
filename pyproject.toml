@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "codebleu"
-description = "Unofficial CodeBLEU implementation that supports Linux and MacOS available on PyPI."
+description = "Unofficial CodeBLEU implementation that supports Linux, MacOS and Windows available on PyPI."
 readme = "README.md"
 license = {text = "MIT License"}
 authors = [
