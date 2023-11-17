@@ -40,7 +40,7 @@ def test_exact_match_works_for_all_langs(lang: str) -> None:
         ("cpp", ["int foo ( int x ) { return x }"], ["int bar ( int y ) {\n   return y\n}"]),
         ("php", ["function foo ( x ) { return x }"], ["function bar ( y ) {\n   return y\n}"]),
         ("go", ["func foo ( x ) { return x }"], ["func bar ( y ) {\n   return y\n}"]),
-        ("ruby", ["def foo(x)\n    return x\nend"], ["def bar(y)\n    return y\nend"])
+        ("ruby", ["def foo ( x ) :\n    return x"], ["def bar ( y ) :\n    return y"]),
     ],
 )
 def test_simple_cases_work_for_all_langs(lang: str, predictions: List[Any], references: List[Any]) -> None:
