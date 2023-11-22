@@ -5,7 +5,7 @@ tags:
 - metric
 - code
 - codebleu
-description: "Unofficial `CodeBLEU` implementation that supports Linux and MacOS."
+description: "Unofficial `CodeBLEU` implementation that supports Linux, MacOS and Windows."
 sdk: gradio
 sdk_version: 3.19.1
 app_file: app.py
@@ -14,22 +14,25 @@ pinned: false
 
 # Metric Card for codebleu
 
-This repository contains an unofficial `CodeBLEU` implementation that supports Linux and MacOS. It is available through `PyPI` and the `evaluate` library.
+This repository contains an unofficial `CodeBLEU` implementation that supports `Linux`, `MacOS` and `Windows`. It is available through `PyPI` and the `evaluate` library.
 
-The code is based on the original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) and updated version by [XLCoST/CodeBLEU](https://github.com/reddy-lab-code-research/XLCoST/tree/main/code/translation/evaluator/CodeBLEU).  It has been refactored, tested, built for macOS, and multiple improvements have been made to enhance usability
+Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`, `Go`, `Ruby`.
 
-Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`.
+---
+
+The code is based on the original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) and updated version by [XLCoST/CodeBLEU](https://github.com/reddy-lab-code-research/XLCoST/tree/main/code/translation/evaluator/CodeBLEU).  It has been refactored, tested, built for macOS and Windows, and multiple improvements have been made to enhance usability.
 
 ## Metric Description
 
 > An ideal evaluation metric should consider the grammatical correctness and the logic correctness.
 > We propose weighted n-gram match and syntactic AST match to measure grammatical correctness, and introduce semantic data-flow match to calculate logic correctness.
 > ![CodeBLEU](CodeBLEU.jpg)  
-(from [CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) repo)
+[from [CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) repo]
 
 In a nutshell, `CodeBLEU` is a weighted combination of `n-gram match (BLEU)`, `weighted n-gram match (BLEU-weighted)`, `AST match` and `data-flow match` scores.
 
 The metric has shown higher correlation with human evaluation than `BLEU` and `accuracy` metrics.
+
 
 ## How to Use
 
@@ -37,7 +40,7 @@ The metric has shown higher correlation with human evaluation than `BLEU` and `a
 
 - `refarences` (`list[str]` or `list[list[str]]`): reference code
 - `predictions` (`list[str]`) predicted code
-- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp c, cpp, javascript, java, php at the moment)
+- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp c, cpp, javascript, java, php, go and ruby at the moment)
 - `weights` (`tuple[float,float,float,float]`): weights of the `ngram_match`, `weighted_ngram_match`, `syntax_match`, and `dataflow_match` respectively, defaults to `(0.25, 0.25, 0.25, 0.25)`
 - `tokenizer` (`callable`): to split code string to tokens, defaults to `s.split()`
 
@@ -71,13 +74,13 @@ reference = "def sum ( first , second ) :\n return second + first"
 
 result = calc_codebleu([reference], [prediction], lang="python", weights=(0.25, 0.25, 0.25, 0.25), tokenizer=None)
 print(result)
-# {
-#   'codebleu': 0.5537, 
-#   'ngram_match_score': 0.1041, 
-#   'weighted_ngram_match_score': 0.1109, 
-#   'syntax_match_score': 1.0, 
-#   'dataflow_match_score': 1.0
-# }
+{
+  'codebleu': 0.5537, 
+  'ngram_match_score': 0.1041, 
+  'weighted_ngram_match_score': 0.1109, 
+  'syntax_match_score': 1.0, 
+  'dataflow_match_score': 1.0
+}
 ```
 
 Or using `evaluate` library (`codebleu` package required):
@@ -98,9 +101,8 @@ Note: `lang` is required;
 
 [//]: # (*Note any known limitations or biases that the metric has, with links and references if possible.*)
 
-As this library require `so` file compilation it is platform dependent.
-
-Currently available for Linux (manylinux) and MacOS on Python 3.8+. 
+This library requires `so` file compilation with tree-sitter, so it is platform dependent.  
+Currently available for `Linux` (manylinux), `MacOS` and `Windows` with Python 3.8+.
 
 
 ## Citation
@@ -116,7 +118,5 @@ Currently available for Linux (manylinux) and MacOS on Python 3.8+.
 ```
 
 ## Further References
-
-This implementation is Based on original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) code -- refactored, build for macos, tested and fixed multiple crutches to make it more usable.
 
 The source code is available at GitHub [k4black/codebleu](https://github.com/k4black/codebleu) repository.

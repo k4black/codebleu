@@ -51,7 +51,7 @@ jobs:
     uses: ./.github/workflows/reusable-build.yml
     with:
       CIBW_SKIP: "pp* cp36-* cp37-*"
-      CIBW_BUILD: "cp*-macosx* cp*-manylinux*"
+      CIBW_BUILD: "cp*-macosx* cp*-manylinux* cp*-win*"
       VERSION: ${{ github.ref_name }}
     secrets: inherit
 
@@ -87,6 +87,6 @@ jobs:
           cp -r evaluate_app/* hf_evaluate_codebleu
           cd hf_evaluate_codebleu
           git add .
-          git commit --allow-empty -m "Auto files update [${{ github.ref_name }}]"
+          git commit --allow-empty -m "chore(auto): update changelog and version [${{ github.ref_name }}]"
           ls -lah
           git push https://k4black:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/k4black/codebleu main

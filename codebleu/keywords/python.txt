@@ -33,3 +33,6 @@ try
 while
 with
 yield
+match
+case
+type

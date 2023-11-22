@@ -39,6 +39,8 @@ def test_exact_match_works_for_all_langs(lang: str) -> None:
         ("c_sharp", ["public int foo ( int x ) { return x }"], ["public int bar ( int y ) {\n   return y\n}"]),
         ("cpp", ["int foo ( int x ) { return x }"], ["int bar ( int y ) {\n   return y\n}"]),
         ("php", ["function foo ( x ) { return x }"], ["function bar ( y ) {\n   return y\n}"]),
+        ("go", ["func foo ( x ) { return x }"], ["func bar ( y ) {\n   return y\n}"]),
+        ("ruby", ["def foo ( x ) :\n    return x"], ["def bar ( y ) :\n    return y"]),
     ],
 )
 def test_simple_cases_work_for_all_langs(lang: str, predictions: List[Any], references: List[Any]) -> None:
@@ -65,8 +67,8 @@ def test_error_when_input_length_mismatch() -> None:
             ["public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? - 1 : 1) ; }"],
             ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }"],
             0.7846,
-            11/19,  # In example, it is 13/21, but with new version of tree-sitter it is 11/19
-            2/3,
+            11 / 19,  # In example, it is 13/21, but with new version of tree-sitter it is 11/19
+            2 / 3,
             0.7019,  # Should be 0.7238 if AST=13/21 in the paper, however at the moment tee-sitter AST is 11/19
         ),
         # https://arxiv.org/pdf/2009.10297.pdf "3.4 Two Examples" at the page 4
@@ -74,8 +76,8 @@ def test_error_when_input_length_mismatch() -> None:
             ["public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? - 1 : 1) ;"],
             ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }"],
             0.7543,
-            11/19,  # In example, it is 13/21, but with new version of tree-sitter it is 11/19
-            2/3,
+            11 / 19,  # In example, it is 13/21, but with new version of tree-sitter it is 11/19
+            2 / 3,
             0.6873,  # Should be 0.6973 if AST=13/21 in the paper, however at the moment tee-sitter AST is 11/19
         ),
         # https://arxiv.org/pdf/2009.10297.pdf "3.4 Two Examples" at the page 4

@@ -1,24 +1,24 @@
 # CodeBLEU
 [![Publish](https://github.com/k4black/codebleu/actions/workflows/publish.yml/badge.svg)](https://github.com/k4black/codebleu/actions/workflows/publish.yml)
-[![Test](https://github.com/k4black/codebleu/actions/workflows/test.yml/badge.svg)](https://github.com/k4black/codebleu/actions/workflows/test.yml)
+[![Test](https://github.com/k4black/codebleu/actions/workflows/test.yml/badge.svg?event=push)](https://github.com/k4black/codebleu/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/k4black/codebleu/branch/main/graph/badge.svg?token=60BIFPWRCE)](https://codecov.io/gh/k4black/codebleu)
 [![PyPI version](https://badge.fury.io/py/codebleu.svg)](https://badge.fury.io/py/codebleu)
 
 
-This repository contains an unofficial `CodeBLEU` implementation that supports Linux and MacOS. It is available through `PyPI` and the `evaluate` library.
+This repository contains an unofficial `CodeBLEU` implementation that supports `Linux`, `MacOS` and `Windows`. It is available through `PyPI` and the `evaluate` library.
 
-The code is based on the original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) and updated version by [XLCoST/CodeBLEU](https://github.com/reddy-lab-code-research/XLCoST/tree/main/code/translation/evaluator/CodeBLEU).  It has been refactored, tested, built for macOS, and multiple improvements have been made to enhance usability
-
-Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`.
+Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`, `Go`, `Ruby`.
 
 ---
+
+The code is based on the original [CodeXGLUE/CodeBLEU](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) and updated version by [XLCoST/CodeBLEU](https://github.com/reddy-lab-code-research/XLCoST/tree/main/code/translation/evaluator/CodeBLEU).  It has been refactored, tested, built for macOS and Windows, and multiple improvements have been made to enhance usability.
 
 ## Metric Description
 
 > An ideal evaluation metric should consider the grammatical correctness and the logic correctness.
 > We propose weighted n-gram match and syntactic AST match to measure grammatical correctness, and introduce semantic data-flow match to calculate logic correctness.
 > ![CodeBLEU](CodeBLEU.jpg)  
-(from [CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) repo)
+[from [CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans/evaluator/CodeBLEU) repo]
 
 In a nutshell, `CodeBLEU` is a weighted combination of `n-gram match (BLEU)`, `weighted n-gram match (BLEU-weighted)`, `AST match` and `data-flow match` scores.
 
@@ -27,14 +27,14 @@ The metric has shown higher correlation with human evaluation than `BLEU` and `a
 
 ## Installation
 
-As this library require `so` file compilation it is platform dependent.  
-Currently available for `Linux` (manylinux) and `MacOS` with Python 3.8+.
+This library requires `so` file compilation with tree-sitter, so it is platform dependent.  
+Currently available for `Linux` (manylinux), `MacOS` and `Windows` with Python 3.8+.
 
 The metrics is available as [pip package](https://pypi.org/project/codebleu/) and can be installed as indicated above:
 ```bash
 pip install codebleu
 ```
-or directly from git repo:
+or directly from git repo (require internet connection to download tree-sitter):
 ```bash
 pip install git+https://github.com/k4black/codebleu.git
 ```
@@ -61,7 +61,7 @@ print(result)
 where `calc_codebleu` takes the following arguments:
 - `refarences` (`list[str]` or `list[list[str]]`): reference code
 - `predictions` (`list[str]`) predicted code
-- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp c, cpp, javascript, java, php at the moment)
+- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp c, cpp, javascript, java, php, go and ruby at the moment)
 - `weights` (`tuple[float,float,float,float]`): weights of the `ngram_match`, `weighted_ngram_match`, `syntax_match`, and `dataflow_match` respectively, defaults to `(0.25, 0.25, 0.25, 0.25)`
 - `tokenizer` (`callable`): to split code string to tokens, defaults to `s.split()`
 
@@ -90,6 +90,31 @@ Feel free to check the HF Space with online example: [k4black/codebleu](https://
 
 Contributions are welcome!  
 If you have any questions, suggestions, or bug reports, please open an issue on GitHub.
+
+Make your own fork and clone it:
+```bash
+git clone https://github.com/k4black/codebleu
+```
+
+For development, you need to install library (for so file to compile) with `test` extra:  
+(require internet connection to download tree-sitter)
+```bash
+python -m pip install -e .[test]
+python -m pip install -e .\[test\]  # for macos
+```
+
+For testing just run pytest:
+```bash
+python -m pytest
+```
+
+To perform a style check, run:
+```bash
+python -m isort codebleu --check
+python -m black codebleu --check
+python -m ruff codebleu
+python -m mypy codebleu
+```
 
 
 ## License
