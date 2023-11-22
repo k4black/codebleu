@@ -44,3 +44,6 @@ void
 while
 with
 yield
+Text
+Builder
+onClick
