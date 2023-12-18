@@ -33,7 +33,7 @@ jobs:
         env:
           CIBW_SKIP: ${{ inputs.CIBW_SKIP }}
           CIBW_BUILD: ${{ inputs.CIBW_BUILD }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           path: ./wheelhouse/*.whl
 
@@ -47,6 +47,6 @@ jobs:
         run: echo -n "${{ inputs.VERSION }}" > VERSION
       - name: Build sdist
         run: pipx run build --sdist
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           path: dist/*.tar.gz
