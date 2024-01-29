@@ -64,8 +64,8 @@ def test_error_when_input_length_mismatch() -> None:
     [
         # https://github.com/microsoft/CodeXGLUE/blob/main/Code-Code/code-to-code-trans/example.png
         (
-            ["public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? - 1 : 1) ; }"],
-            ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }"],
+            ["public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? -1 : 1 ) ; }"],
+            ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? -1 : 1 ) ; }"],
             0.7846,
             11 / 19,  # In example, it is 13/21, but with new version of tree-sitter it is 11/19
             2 / 3,
@@ -73,8 +73,8 @@ def test_error_when_input_length_mismatch() -> None:
         ),
         # https://arxiv.org/pdf/2009.10297.pdf "3.4 Two Examples" at the page 4
         (
-            ["public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? - 1 : 1) ;"],
-            ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }"],
+            ["public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? -1 : 1 ) ;"],
+            ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? -1 : 1 ) ; }"],
             0.7543,
             11 / 19,  # In example, it is 13/21, but with new version of tree-sitter it is 11/19
             2 / 3,
@@ -82,8 +82,8 @@ def test_error_when_input_length_mismatch() -> None:
         ),
         # https://arxiv.org/pdf/2009.10297.pdf "3.4 Two Examples" at the page 4
         (
-            ["public static int Sign ( double c ) { return ( int ) ( ( c == 0 ) ? 0 : ( c < 0 ) ? - 1 : 1) ; }"],
-            ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? - 1 : 1) ; }"],
+            ["public static int Sign ( double c ) { return ( int ) ( ( c == 0 ) ? 0 : ( c < 0 ) ? -1 : 1 ) ; }"],
+            ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? -1 : 1 ) ; }"],
             0.7571,  # Error in the Figure 4, text "Example 2" states 0.7571, not 0.6814,
             1.0,
             1.0,
