@@ -53,7 +53,7 @@ jobs:
       CIBW_BUILD: "cp*-macosx* cp*-manylinux* cp*-win*"
       CIBW_ARCHS_MACOS: "x86_64 arm64"
       CIBW_ARCHS_LINUX: "x86_64 i686 aarch64"
-      CIBW_ARCHS_WINDOWS: "x86_64"
+      CIBW_ARCHS_WINDOWS: "x86"
     secrets: inherit
 
   full-tests-python:
