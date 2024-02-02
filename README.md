@@ -5,7 +5,7 @@
 [![PyPI version](https://badge.fury.io/py/codebleu.svg)](https://badge.fury.io/py/codebleu)
 
 
-This repository contains an unofficial `CodeBLEU` implementation that supports `Linux`, `MacOS` and `Windows`. It is available through `PyPI` and the `evaluate` library.
+This repository contains an unofficial `CodeBLEU` implementation that supports `Linux`, `MacOS` (incl. M-series) and `Windows`. It is available through `PyPI` and the `evaluate` library.
 
 Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`, `Go`, `Ruby`.
 
