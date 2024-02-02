@@ -62,6 +62,12 @@ jobs:
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
         os: [ubuntu-latest, macos-latest, macos-14, windows-latest]  # at the moment macos-14 is exclusive M1 chip
+        # macos-14 not supporting 3.8 and 3.9
+        exclude:
+          - python-version: 3.8
+            os: macos-14
+          - python-version: 3.9
+            os: macos-14
       fail-fast: false
     name: Test wheel on ${{ matrix.os }} and Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
