@@ -27,14 +27,17 @@ jobs:
         if: ${{ inputs.VERSION != '' }}
         run: echo -n "${{ inputs.VERSION }}" > VERSION
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.4
+        uses: pypa/cibuildwheel@v2.16.5
         with:
           output-dir: wheelhouse
         env:
           CIBW_SKIP: ${{ inputs.CIBW_SKIP }}
           CIBW_BUILD: ${{ inputs.CIBW_BUILD }}
+      - name: List wheels
+        run: ls -lah ./wheelhouse
       - uses: actions/upload-artifact@v4
         with:
+          name: wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
   build-sdist:
