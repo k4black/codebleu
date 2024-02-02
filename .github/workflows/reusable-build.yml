@@ -33,9 +33,9 @@ jobs:
         env:
           CIBW_SKIP: ${{ inputs.CIBW_SKIP }}
           CIBW_BUILD: ${{ inputs.CIBW_BUILD }}
-      - name: List wheels (linux or macos)
-        if: ${{ matrix.os != 'windows-latest' }}
+      - name: List wheels
         run: ls -lah ./wheelhouse
+        shell: bash
       - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ matrix.os }}
