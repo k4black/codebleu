@@ -9,6 +9,15 @@ on:
       CIBW_BUILD:
         required: true
         type: string
+      CIBW_ARCHS_MACOS:
+        required: false
+        type: string
+      CIBW_ARCHS_LINUX:
+        required: false
+        type: string
+      CIBW_ARCHS_WINDOWS:
+        required: false
+        type: string
       VERSION:
         required: false
         type: string
@@ -23,6 +32,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
       - name: Set correct version
         if: ${{ inputs.VERSION != '' }}
         run: echo -n "${{ inputs.VERSION }}" > VERSION
@@ -33,6 +46,9 @@ jobs:
         env:
           CIBW_SKIP: ${{ inputs.CIBW_SKIP }}
           CIBW_BUILD: ${{ inputs.CIBW_BUILD }}
+          CIBW_ARCHS_MACOS: ${{ inputs.CIBW_ARCHS_MACOS }}
+          CIBW_ARCHS_LINUX: ${{ inputs.CIBW_ARCHS_LINUX }}
+          CIBW_ARCHS_WINDOWS: ${{ inputs.CIBW_ARCHS_WINDOWS }}
       - name: List wheels
         run: ls -lah ./wheelhouse
         shell: bash
