@@ -52,6 +52,9 @@ jobs:
     with:
       CIBW_SKIP: "pp* cp36-* cp37-*"
       CIBW_BUILD: "cp*-macosx* cp*-manylinux* cp*-win*"
+      CIBW_ARCHS_MACOS: "x86_64 arm64"
+      CIBW_ARCHS_LINUX: "x86_64 aarch64"
+      CIBW_ARCHS_WINDOWS: "x86"
       VERSION: ${{ github.ref_name }}
     secrets: inherit
 
