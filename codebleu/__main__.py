@@ -57,7 +57,7 @@ if __name__ == "__main__":
         "--lang",
         type=str,
         required=True,
-        choices=["java", "js", "c_sharp", "php", "go", "python", "ruby"],
+        choices=["java", "js", "c_sharp", "php", "go", "python", "ruby", "rust"],
     )
     parser.add_argument("--params", type=str, default="0.25,0.25,0.25,0.25", help="alpha, beta and gamma")
 
