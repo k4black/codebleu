@@ -7,7 +7,18 @@ from typing import Callable, Dict, List, Optional, Tuple, Union
 from . import bleu, dataflow_match, syntax_match, weighted_ngram_match
 
 PACKAGE_DIR = Path(__file__).parent
-AVAILABLE_LANGS = ["java", "javascript", "c_sharp", "php", "c", "cpp", "python", "go", "ruby", "rust"]  # keywords available
+AVAILABLE_LANGS = [
+    "java",
+    "javascript",
+    "c_sharp",
+    "php",
+    "c",
+    "cpp",
+    "python",
+    "go",
+    "ruby",
+    "rust",
+]  # keywords available
 
 
 def calc_codebleu(
