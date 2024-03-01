@@ -9,6 +9,7 @@ from .DFG import (
     DFG_php,
     DFG_python,
     DFG_ruby,
+    DFG_rust,
 )
 from .utils import (
     index_to_code_token,
@@ -25,6 +26,7 @@ __all__ = [
     "DFG_php",
     "DFG_python",
     "DFG_ruby",
+    "DFG_rust",
     "index_to_code_token",
     "remove_comments_and_docstrings",
     "tree_to_token_index",

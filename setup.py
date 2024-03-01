@@ -23,6 +23,7 @@ tree_sitter_languages = {
     "c-sharp": "https://github.com/tree-sitter/tree-sitter-c-sharp/archive/refs/tags/v0.20.0.zip",
     "c": "https://github.com/tree-sitter/tree-sitter-c/archive/refs/tags/v0.20.7.zip",
     "cpp": "https://github.com/tree-sitter/tree-sitter-cpp/archive/refs/tags/v0.20.3.zip",
+    "rust": "https://github.com/tree-sitter/tree-sitter-rust/archive/refs/tags/v0.20.1.zip",
 }
 
 
