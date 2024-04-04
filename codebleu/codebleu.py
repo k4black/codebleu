@@ -94,9 +94,9 @@ def calc_codebleu(
     )
 
     return {
-        "codebleu": code_bleu_score,
-        "ngram_match_score": ngram_match_score,
-        "weighted_ngram_match_score": weighted_ngram_match_score,
-        "syntax_match_score": syntax_match_score,
-        "dataflow_match_score": dataflow_match_score,
+        "codebleu": code_bleu_score
+       # "ngram_match_score": ngram_match_score,
+      #  "weighted_ngram_match_score": weighted_ngram_match_score,
+     #   "syntax_match_score": syntax_match_score,
+    #    "dataflow_match_score": dataflow_match_score,
     }
