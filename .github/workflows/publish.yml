@@ -57,8 +57,10 @@ jobs:
     steps:
       - name: Build wheel
         run: |
-          python3 -m pip install --upgrade build
-          python3 -m build --wheel --outdir ./dist .
+          python3 -m venv .venv
+          source .venv/bin/activate
+          python3 -m pip install --upgrade build wheel setuptools
+          python3 -m build --wheel --sdist --outdir ./dist --no-isolation
       - uses: pypa/gh-action-pypi-publish@release/v1
 
   sync-to-hf-hub:
