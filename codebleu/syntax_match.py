@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from tree_sitter import Language, Parser
+from tree_sitter import Parser
 
 from .parser import (
     DFG_csharp,

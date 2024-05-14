@@ -9,7 +9,6 @@ from itertools import chain
 
 from tree_sitter import Language
 
-
 AVAILABLE_LANGS = [
     "java",
     "javascript",
@@ -133,36 +132,46 @@ def get_tree_sitter_language(lang: str) -> Language:
     try:
         if lang == "java":
             import tree_sitter_java
+
             return Language(tree_sitter_java.language())
         elif lang == "javascript":
             import tree_sitter_javascript
+
             return Language(tree_sitter_javascript.language())
         elif lang == "c_sharp":
             import tree_sitter_c_sharp
+
             return Language(tree_sitter_c_sharp.language())
         elif lang == "php":
             import tree_sitter_php
+
             try:
                 return Language(tree_sitter_php.language())  # type: ignore[attr-defined]
             except AttributeError:
                 return Language(tree_sitter_php.language_php())
         elif lang == "c":
             import tree_sitter_c
+
             return Language(tree_sitter_c.language())
         elif lang == "cpp":
             import tree_sitter_cpp
+
             return Language(tree_sitter_cpp.language())
         elif lang == "python":
             import tree_sitter_python
+
             return Language(tree_sitter_python.language())
         elif lang == "go":
             import tree_sitter_go
+
             return Language(tree_sitter_go.language())
         elif lang == "ruby":
             import tree_sitter_ruby
+
             return Language(tree_sitter_ruby.language())
         elif lang == "rust":
             import tree_sitter_rust
+
             return Language(tree_sitter_rust.language())
         else:
             assert False, "Not reachable"

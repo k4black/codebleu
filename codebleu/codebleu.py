@@ -70,10 +70,14 @@ def calc_codebleu(
     weighted_ngram_match_score = weighted_ngram_match.corpus_bleu(tokenized_refs_with_weights, tokenized_hyps)
 
     # calculate syntax match
-    syntax_match_score = syntax_match.corpus_syntax_match(references, hypothesis, lang, tree_sitter_language=tree_sitter_language)
+    syntax_match_score = syntax_match.corpus_syntax_match(
+        references, hypothesis, lang, tree_sitter_language=tree_sitter_language
+    )
 
     # calculate dataflow match
-    dataflow_match_score = dataflow_match.corpus_dataflow_match(references, hypothesis, lang, tree_sitter_language=tree_sitter_language)
+    dataflow_match_score = dataflow_match.corpus_dataflow_match(
+        references, hypothesis, lang, tree_sitter_language=tree_sitter_language
+    )
 
     alpha, beta, gamma, theta = weights
     code_bleu_score = (

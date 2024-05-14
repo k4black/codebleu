@@ -18,13 +18,13 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - name: Install dependencies
         run: |
-          python -m pip install -e .[test]
+          python -m pip install -e .[all,test]
       - name: Run isort check
         run: python -m isort codebleu --check
       - name: Run black check
         run: python -m black codebleu --check
       - name: Run ruff check
-        run: python -m ruff codebleu
+        run: python -m ruff check codebleu
       - name: Run mypy check
         run: python -m mypy codebleu
 
@@ -41,7 +41,7 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - name: Install lib from source and dependencies
         run: |
-          python -m pip install -e .[test]
+          python -m pip install -e .[all,test]
       - name: Run tests
         run: python -m pytest
 
