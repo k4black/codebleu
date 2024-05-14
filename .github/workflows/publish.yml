@@ -56,7 +56,9 @@ jobs:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
       - name: Build wheel
-        run: python -m pip wheel --no-deps --wheel-dir ./dist .
+        run: |
+          python3 -m pip install --upgrade build
+          python3 -m build --wheel --outdir ./dist .
       - uses: pypa/gh-action-pypi-publish@release/v1
 
   sync-to-hf-hub:

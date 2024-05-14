@@ -57,7 +57,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build wheel
-        run: python -m pip wheel --no-deps --wheel-dir ./dist .
+        run: |
+          python3 -m pip install --upgrade build
+          python3 -m build --wheel --outdir ./dist .
       - name: Show dist files
         run: ls -lah ./dist
         shell: bash
