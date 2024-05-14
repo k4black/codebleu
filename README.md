@@ -48,6 +48,11 @@ Or you can install all languages:
 pip install codebleu[all]
 ```
 
+Note: At the moment (May 2024) precompiled languages are NOT available for arm64 (M1) MacOS, so you have to install and build tree-sitter languages manually, for example:
+```bash
+pip install pip install git+https://github.com/tree-sitter/tree-sitter-python.git
+```
+
 
 ## Usage 
 
