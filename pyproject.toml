@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel", "tree-sitter>=0.20.0,<1.0.0", "requests>=2.0.0,<3.0.0"]
+requires = ["setuptools>=61.0.0", "wheel", "tree-sitter>=0.20.0,<0.22.0", "requests>=2.0.0,<3.0.0"]
 build-backend = "setuptools.build_meta"
 
 
@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "tree-sitter >=0.20.0,<1.0.0",
+    "tree-sitter >=0.20.0,<0.22.0",
     "setuptools >=61.0.0",  # distutils removed in 3.12, but distutils.ccompiler used in tree-sitter
 ]
 
