@@ -45,19 +45,8 @@ jobs:
       - name: Run tests
         run: python -m pytest
 
-  external-build-workflow:
-    needs: [fast-tests-python]
-    uses: ./.github/workflows/reusable-build.yml
-    with:
-      CIBW_SKIP: "pp* cp36-* cp37-*"
-      CIBW_BUILD: "cp*-macosx* cp*-manylinux* cp*-win*"
-      CIBW_ARCHS_MACOS: "x86_64 arm64"
-      CIBW_ARCHS_LINUX: "x86_64 aarch64"
-      CIBW_ARCHS_WINDOWS: "x86"
-    secrets: inherit
-
   full-tests-python:
-    needs: [fast-tests-python, external-build-workflow]
+    needs: [fast-tests-python]
     strategy:
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
@@ -67,11 +56,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          # for macos-13 get macos-latest artifacts
-          name: wheels-${{ matrix.os == 'macos-13' && 'macos-latest' || matrix.os }}
-          path: dist
+      - name: Build wheel
+        run: python -m pip wheel --no-deps --wheel-dir ./dist .
       - name: Show dist files
         run: ls -lah ./dist
         shell: bash

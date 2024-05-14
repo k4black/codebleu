@@ -46,20 +46,8 @@ jobs:
           echo "VERSION"
           echo "CHANGELOG"
 
-  external-build-workflow:
-    needs: update-version-and-changelog
-    uses: ./.github/workflows/reusable-build.yml
-    with:
-      CIBW_SKIP: "pp* cp36-* cp37-*"
-      CIBW_BUILD: "cp*-macosx* cp*-manylinux* cp*-win*"
-      CIBW_ARCHS_MACOS: "x86_64 arm64"
-      CIBW_ARCHS_LINUX: "x86_64 aarch64"
-      CIBW_ARCHS_WINDOWS: "x86"
-      VERSION: ${{ github.ref_name }}
-    secrets: inherit
-
   release-python-package:
-    needs: [external-build-workflow, update-version-and-changelog]
+    needs: [update-version-and-changelog]
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -67,10 +55,8 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: artifact  # if `name: artifact` is omitted, the action will create extra parent dir
-          path: dist
+      - name: Build wheel
+        run: python -m pip wheel --no-deps --wheel-dir ./dist .
       - uses: pypa/gh-action-pypi-publish@release/v1
 
   sync-to-hf-hub:
