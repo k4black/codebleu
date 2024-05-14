@@ -56,12 +56,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - name: Make venv for macos to cover "error externally-managed-environment"
+      - name: Build wheel (macos for "error externally-managed-environment")
         if: startsWith(matrix.os, 'macos')
         run: |
           python3 -m venv .venv
           source .venv/bin/activate
-      - name: Build wheel
+          python3 -m pip install --upgrade build wheel setuptools
+          python3 -m build --wheel --sdist --outdir ./dist --no-isolation
+      - name: Build wheel (all other)
+        if: !startsWith(matrix.os, 'macos')
         run: |
           python3 -m pip install --upgrade build
           python3 -m build --wheel --sdist --outdir ./dist
