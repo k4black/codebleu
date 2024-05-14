@@ -80,6 +80,13 @@ jobs:
         run: |
           rm -rf ./dist/*.tar.gz
         shell: bash
+      - name: Build tree-sitter languages for arm64 (not available on PyPI for now)
+        if: startsWith(matrix.os, 'macos-latest')
+        shell: bash
+        run: |
+          languages="python java javascript c-sharp c cpp go ruby rust php"
+          for lang in $languages; do
+            python3 -m pip install git+https://github.com/tree-sitter/tree-sitter-$lang
       - name: Install lib and dependencies
         run: |
           # force install package from local dist directory
