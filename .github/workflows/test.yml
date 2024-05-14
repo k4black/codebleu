@@ -87,6 +87,7 @@ jobs:
           languages="python java javascript c-sharp c cpp go ruby rust php"
           for lang in $languages; do
             python3 -m pip install git+https://github.com/tree-sitter/tree-sitter-$lang
+          done
       - name: Install lib and dependencies
         run: |
           # force install package from local dist directory
