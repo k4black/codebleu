@@ -90,8 +90,8 @@ jobs:
           pip uninstall -y codebleu || true
           # TODO: check the sdist package is not installed
           pip install --upgrade --no-deps --no-index --find-links=./dist codebleu
-          # install dependencies for the package and tests
-          pip install .[test]
+          # install dependencies for the package languages and tests
+          pip install .[all,test]
       - name: Test itself
         run: python -m pytest --cov-report=xml
       - name: Upload coverage
