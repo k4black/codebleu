@@ -64,7 +64,7 @@ jobs:
           python3 -m pip install --upgrade build wheel setuptools
           python3 -m build --wheel --sdist --outdir ./dist --no-isolation
       - name: Build wheel (all other)
-        if: !startsWith(matrix.os, 'macos')
+        if: "!startsWith(matrix.os, 'macos')"
         run: |
           python3 -m pip install --upgrade build
           python3 -m build --wheel --sdist --outdir ./dist
