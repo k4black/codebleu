@@ -5,20 +5,9 @@ from pathlib import Path
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
 from . import bleu, dataflow_match, syntax_match, weighted_ngram_match
+from .utils import AVAILABLE_LANGS, get_tree_sitter_language
 
 PACKAGE_DIR = Path(__file__).parent
-AVAILABLE_LANGS = [
-    "java",
-    "javascript",
-    "c_sharp",
-    "php",
-    "c",
-    "cpp",
-    "python",
-    "go",
-    "ruby",
-    "rust",
-]  # keywords available
 
 
 def calc_codebleu(
@@ -28,7 +17,6 @@ def calc_codebleu(
     weights: Tuple[float, float, float, float] = (0.25, 0.25, 0.25, 0.25),
     tokenizer: Optional[Callable] = None,
     keywords_dir: Path = PACKAGE_DIR / "keywords",
-    lang_so_file: Path = PACKAGE_DIR / "my-languages.so",
 ) -> Dict[str, float]:
     """Calculate CodeBLEU score
 
@@ -48,7 +36,9 @@ def calc_codebleu(
     assert lang in AVAILABLE_LANGS, f"Language {lang} is not supported (yet). Available languages: {AVAILABLE_LANGS}"
     assert len(weights) == 4, "weights should be a tuple of 4 floats (alpha, beta, gamma, theta)"
     assert keywords_dir.exists(), f"keywords_dir {keywords_dir} does not exist"
-    assert lang_so_file.exists(), f"lang_so_file {lang_so_file} does not exist"
+
+    # get the tree-sitter language for a given language
+    tree_sitter_language = get_tree_sitter_language(lang)
 
     # preprocess inputs
     references = [[x.strip() for x in ref] if isinstance(ref, list) else [ref.strip()] for ref in references]
@@ -80,10 +70,14 @@ def calc_codebleu(
     weighted_ngram_match_score = weighted_ngram_match.corpus_bleu(tokenized_refs_with_weights, tokenized_hyps)
 
     # calculate syntax match
-    syntax_match_score = syntax_match.corpus_syntax_match(references, hypothesis, lang, str(lang_so_file))
+    syntax_match_score = syntax_match.corpus_syntax_match(
+        references, hypothesis, lang, tree_sitter_language=tree_sitter_language
+    )
 
     # calculate dataflow match
-    dataflow_match_score = dataflow_match.corpus_dataflow_match(references, hypothesis, lang, str(lang_so_file))
+    dataflow_match_score = dataflow_match.corpus_dataflow_match(
+        references, hypothesis, lang, tree_sitter_language=tree_sitter_language
+    )
 
     alpha, beta, gamma, theta = weights
     code_bleu_score = (

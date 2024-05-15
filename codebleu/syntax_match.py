@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-from tree_sitter import Language, Parser
+from tree_sitter import Parser
 
 from .parser import (
     DFG_csharp,
@@ -13,6 +13,7 @@ from .parser import (
     DFG_ruby,
     remove_comments_and_docstrings,
 )
+from .utils import get_tree_sitter_language
 
 dfg_function = {
     "python": DFG_python,
@@ -25,14 +26,16 @@ dfg_function = {
 }
 
 
-def calc_syntax_match(references, candidate, lang, lang_so_file):
-    return corpus_syntax_match([references], [candidate], lang, lang_so_file)
+def calc_syntax_match(references, candidate, lang):
+    return corpus_syntax_match([references], [candidate], lang)
 
 
-def corpus_syntax_match(references, candidates, lang, lang_so_file):
-    tree_sitter_language = Language(lang_so_file, lang)
+def corpus_syntax_match(references, candidates, lang, tree_sitter_language=None):
+    if not tree_sitter_language:
+        tree_sitter_language = get_tree_sitter_language(lang)
+
     parser = Parser()
-    parser.set_language(tree_sitter_language)
+    parser.language = tree_sitter_language
     match_count = 0
     match_count_candidate_to_reference = 0
     total_count = 0
@@ -61,7 +64,7 @@ def corpus_syntax_match(references, candidates, lang, lang_so_file):
                 node_stack.append([root_node, depth])
                 while len(node_stack) != 0:
                     cur_node, cur_depth = node_stack.pop()
-                    sub_tree_sexp_list.append([cur_node.sexp(), cur_depth])
+                    sub_tree_sexp_list.append([str(cur_node), cur_depth])
                     for child_node in cur_node.children:
                         if len(child_node.children) != 0:
                             depth = cur_depth + 1

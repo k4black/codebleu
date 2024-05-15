@@ -39,6 +39,20 @@ or directly from git repo (require internet connection to download tree-sitter):
 pip install git+https://github.com/k4black/codebleu.git
 ```
 
+Also you have to install tree-sitter language you need (e.g. python, rust, etc):
+```bash
+pip install tree-sitter-python
+```
+Or you can install all languages:
+```bash
+pip install codebleu[all]
+```
+
+Note: At the moment (May 2024) precompiled languages are NOT available for arm64 (M1) MacOS, so you have to install and build tree-sitter languages manually, for example:
+```bash
+pip install pip install git+https://github.com/tree-sitter/tree-sitter-python.git
+```
+
 
 ## Usage 
 
@@ -96,11 +110,11 @@ Make your own fork and clone it:
 git clone https://github.com/k4black/codebleu
 ```
 
-For development, you need to install library (for so file to compile) with `test` extra:  
+For development, you need to install library with `all` precompiled languages and `test` extra:  
 (require internet connection to download tree-sitter)
 ```bash
-python -m pip install -e .[test]
-python -m pip install -e .\[test\]  # for macos
+python -m pip install -e .[all,test]
+python -m pip install -e .\[all,test\]  # for macos
 ```
 
 For testing just run pytest:

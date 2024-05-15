@@ -65,7 +65,7 @@ Each of the scores is in range `[0, 1]`, where `1` is the best score.
 
 [//]: # (*Give code examples of the metric being used. Try to include examples that clear up any potential ambiguity left from the metric description above. If possible, provide a range of examples that show both typical and atypical results, as well as examples where a variety of input parameters are passed.*)
 
-Using pip package (`pip install codebleu`):
+Using pip package (`pip install codebleu`), also you have to install tree-sitter language you need (e.g. `pip install tree-sitter-python` or `pip install codebleu[all]` to install all languages):
 ```python
 from codebleu import calc_codebleu
 

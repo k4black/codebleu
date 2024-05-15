@@ -2,7 +2,7 @@
 # Licensed under the MIT license.
 import logging
 
-from tree_sitter import Language, Parser
+from tree_sitter import Parser
 
 from .parser import (
     DFG_csharp,
@@ -17,6 +17,7 @@ from .parser import (
     remove_comments_and_docstrings,
     tree_to_token_index,
 )
+from .utils import get_tree_sitter_language
 
 dfg_function = {
     "python": DFG_python,
@@ -36,10 +37,12 @@ def calc_dataflow_match(references, candidate, lang, langso_so_file):
     return corpus_dataflow_match([references], [candidate], lang, langso_so_file)
 
 
-def corpus_dataflow_match(references, candidates, lang, langso_so_file):
-    LANGUAGE = Language(langso_so_file, lang)
+def corpus_dataflow_match(references, candidates, lang, tree_sitter_language=None):
+    if not tree_sitter_language:
+        tree_sitter_language = get_tree_sitter_language(lang)
+
     parser = Parser()
-    parser.set_language(LANGUAGE)
+    parser.language = tree_sitter_language
     parser = [parser, dfg_function[lang]]
     match_count = 0
     total_count = 0

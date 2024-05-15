@@ -18,13 +18,13 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - name: Install dependencies
         run: |
-          python -m pip install -e .[test]
+          python -m pip install -e .[all,test]
       - name: Run isort check
         run: python -m isort codebleu --check
       - name: Run black check
         run: python -m black codebleu --check
       - name: Run ruff check
-        run: python -m ruff codebleu
+        run: python -m ruff check codebleu
       - name: Run mypy check
         run: python -m mypy codebleu
 
@@ -41,37 +41,33 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - name: Install lib from source and dependencies
         run: |
-          python -m pip install -e .[test]
+          python -m pip install -e .[all,test]
       - name: Run tests
         run: python -m pytest
 
-  external-build-workflow:
-    needs: [fast-tests-python]
-    uses: ./.github/workflows/reusable-build.yml
-    with:
-      CIBW_SKIP: "pp* cp36-* cp37-*"
-      CIBW_BUILD: "cp*-macosx* cp*-manylinux* cp*-win*"
-      CIBW_ARCHS_MACOS: "x86_64 arm64"
-      CIBW_ARCHS_LINUX: "x86_64 aarch64"
-      CIBW_ARCHS_WINDOWS: "x86"
-    secrets: inherit
-
   full-tests-python:
-    needs: [fast-tests-python, external-build-workflow]
+    needs: [fast-tests-python]
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.9', '3.10', '3.11', '3.12']
         os: [ubuntu-latest, macos-latest, macos-13, windows-latest]  # at the moment macos-latest=macos-14 is exclusive M1 chip,  macos-13 is intel
       fail-fast: false
     name: Test wheel on ${{ matrix.os }} and Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          # for macos-13 get macos-latest artifacts
-          name: wheels-${{ matrix.os == 'macos-13' && 'macos-latest' || matrix.os }}
-          path: dist
+      - name: Build wheel (macos for "error externally-managed-environment")
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          python3 -m pip install --upgrade build wheel setuptools
+          python3 -m build --wheel --sdist --outdir ./dist --no-isolation
+      - name: Build wheel (all other)
+        if: "!startsWith(matrix.os, 'macos')"
+        run: |
+          python3 -m pip install --upgrade build
+          python3 -m build --wheel --sdist --outdir ./dist
       - name: Show dist files
         run: ls -lah ./dist
         shell: bash
@@ -84,14 +80,22 @@ jobs:
         run: |
           rm -rf ./dist/*.tar.gz
         shell: bash
+      - name: Build tree-sitter languages for arm64 (not available on PyPI for now)
+        if: startsWith(matrix.os, 'macos-latest')
+        shell: bash
+        run: |
+          languages="python java javascript c-sharp c cpp go ruby rust php"
+          for lang in $languages; do
+            python3 -m pip install git+https://github.com/tree-sitter/tree-sitter-$lang
+          done
       - name: Install lib and dependencies
         run: |
           # force install package from local dist directory
           pip uninstall -y codebleu || true
           # TODO: check the sdist package is not installed
           pip install --upgrade --no-deps --no-index --find-links=./dist codebleu
-          # install dependencies for the package and tests
-          pip install .[test]
+          # install dependencies for the package languages and tests
+          pip install .[all,test]
       - name: Test itself
         run: python -m pytest --cov-report=xml
       - name: Upload coverage

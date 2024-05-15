@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel", "tree-sitter>=0.20.0,<0.22.0", "requests>=2.0.0,<3.0.0"]
+requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 
@@ -9,12 +9,12 @@ description = "Unofficial CodeBLEU implementation that supports Linux, MacOS and
 readme = "README.md"
 license = {text = "MIT License"}
 authors = [
-  {name = "Konstantin Chernyshev", email = "kdchernyshev@gmail.com"},
+  {name = "Konstantin Chernyshev", email = "kdchernyshev+github@gmail.com"},
 ]
 keywords = ["codebleu", "code", "bleu", "nlp", "natural language processing", "programming", "evaluate", "evaluation", "code generation", "metrics"]
 dynamic = ["version"]
 
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python",
@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "tree-sitter >=0.20.0,<0.22.0",
+    "tree-sitter >=0.22.0,<0.23.0",
     "setuptools >=61.0.0",  # distutils removed in 3.12, but distutils.ccompiler used in tree-sitter
 ]
 
@@ -37,7 +37,7 @@ exclude = ["tests", "tests.*", "codebleu.parser.tree-sitter"]
 
 
 [tool.setuptools.package-data]
-"*" = ["py.typed", "*.txt", "*.so", "*.dylib", "*.dll", "keywords/*"]
+"*" = ["py.typed", "*.txt", "keywords/*"]
 
 
 [project.scripts]
@@ -47,6 +47,18 @@ codebleu = "codebleu.__main__:main"
 homepage = "https://github.com/k4black/codebleu"
 
 [project.optional-dependencies]
+all = [
+    "tree-sitter-python ~=0.21",
+    "tree-sitter-go ~=0.21",
+    "tree-sitter-javascript ~=0.21",
+    "tree-sitter-ruby ~=0.21",
+    "tree-sitter-php ~=0.22",
+    "tree-sitter-java ~=0.21",
+    "tree-sitter-c-sharp ~=0.21",
+    "tree-sitter-c ~=0.21",
+    "tree-sitter-cpp ~=0.22",
+    "tree-sitter-rust ~=0.21",
+]
 test = [
     "pytest >=7.0.0,<9.0.0",
     "pytest-cov >=4.0.0,<6.0.0",
