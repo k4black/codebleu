@@ -55,6 +55,7 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
+      - uses: actions/checkout@v4
       - name: Build wheel
         run: |
           python3 -m pip install --upgrade build
