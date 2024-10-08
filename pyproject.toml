@@ -23,7 +23,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "tree-sitter >=0.22.0,<0.23.0",
+    "tree-sitter >=0.22.0,<0.24.0",
     "setuptools >=61.0.0",  # distutils removed in 3.12, but distutils.ccompiler used in tree-sitter
 ]
 
@@ -64,11 +64,11 @@ test = [
     "pytest-cov >=4.0.0,<6.0.0",
     "pytest-mock >=3.0.0,<4.0.0",
     "pytest-timeout >=2.0.0,<3.0.0",
-    "black ==24.4.0",
+    "black ==24.8.0",
     "mypy >=1.0.0,<2.0.0",
     "types-tree-sitter",
     "flake8 >=6.0.0,<8.0.0",
-    "ruff >=0.0.275,<0.5.0",
+    "ruff >=0.5.1,<0.7.0",
     "isort >=5.0.0,<6.0.0",
     "nltk >=3.0.0,<4.0.0",
 ]
