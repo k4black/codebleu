@@ -42,6 +42,7 @@ def test_exact_match_works_for_all_langs(lang: str) -> None:
         ("go", ["func foo ( x ) { return x }"], ["func bar ( y ) {\n   return y\n}"]),
         ("ruby", ["def foo ( x ) :\n    return x"], ["def bar ( y ) :\n    return y"]),
         ("rust", ["fn foo ( x ) -> i32 { x }"], ["fn bar ( y ) -> i32 { y }"]),
+        ("fortran", ["function foo ( x ) result ( x )\n    end function foo"], ["function bar ( y ) result ( y )\n    end function bar"]),
     ],
 )
 def test_simple_cases_work_for_all_langs(lang: str, predictions: List[Any], references: List[Any]) -> None:

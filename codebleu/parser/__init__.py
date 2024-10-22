@@ -10,6 +10,7 @@ from .DFG import (
     DFG_python,
     DFG_ruby,
     DFG_rust,
+    DFG_fortran,
 )
 from .utils import (
     index_to_code_token,

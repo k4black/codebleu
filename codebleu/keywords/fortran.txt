@@ -1,0 +1,78 @@
+allocatable
+allocate
+assignment
+backspace
+call
+case
+character
+close
+complex
+contains
+cycle
+deallocate
+default
+do
+else
+else if
+elsewhere
+end do
+end function
+end if
+end interface
+end module
+end program
+end select
+end subroutine
+end type
+end where
+endfile
+exit
+format
+function
+if
+implicit
+in
+inout
+integer
+intent
+interface
+intrinsic
+inquire
+kind
+len
+logical
+module
+namelist
+nullify
+only
+open
+operator
+optional
+out
+print
+pointer
+private
+program
+public
+read
+real
+recursive
+result
+return
+rewind
+select case
+stop
+subroutine
+target
+then
+type
+use
+where
+while
+write
+
+
+
+
+
+
