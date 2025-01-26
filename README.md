@@ -73,7 +73,7 @@ print(result)
 # }
 ```
 where `calc_codebleu` takes the following arguments:
-- `refarences` (`list[str]` or `list[list[str]]`): reference code
+- `references` (`list[str]` or `list[list[str]]`): reference code
 - `predictions` (`list[str]`) predicted code
 - `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp c, cpp, javascript, java, php, go and ruby at the moment)
 - `weights` (`tuple[float,float,float,float]`): weights of the `ngram_match`, `weighted_ngram_match`, `syntax_match`, and `dataflow_match` respectively, defaults to `(0.25, 0.25, 0.25, 0.25)`
