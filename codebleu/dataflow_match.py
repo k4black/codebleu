@@ -9,6 +9,7 @@ from .parser import (
     DFG_go,
     DFG_java,
     DFG_javascript,
+    DFG_typescript,
     DFG_php,
     DFG_python,
     DFG_ruby,
@@ -26,6 +27,7 @@ dfg_function = {
     "go": DFG_go,
     "php": DFG_php,
     "javascript": DFG_javascript,
+    "typescript": DFG_typescript,
     "c_sharp": DFG_csharp,
     "c": DFG_csharp,  # XLCoST uses C# parser for C
     "cpp": DFG_csharp,  # XLCoST uses C# parser for C++

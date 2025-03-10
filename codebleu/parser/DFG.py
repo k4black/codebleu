@@ -1215,6 +1215,201 @@ def DFG_javascript(root_node, index_to_code, states):
         return sorted(DFG, key=lambda x: x[1]), states
 
 
+def DFG_typescript(root_node, index_to_code, states):
+    # Define node types based on tree-sitter-typescript grammar
+    assignment = ["assignment_expression", "augmented_assignment_expression"]
+    def_statement = ["variable_declarator"]  # Variable declarations (const, let, var)
+    increment_statement = ["update_expression"]  # e.g., i++ or ++i
+    if_statement = ["if_statement"]  # If statements (else is a child node)
+    for_statement = ["for_statement"]  # Traditional for loops
+    enhanced_for_statement = ["for_in_statement"]  # for...in loops in TypeScript
+    while_statement = ["while_statement"]  # While loops
+    do_first_statement = []  # No special "do first" statements in TypeScript
+    
+    states = states.copy()  # Copy states to avoid modifying the input
+    
+    # Leaf nodes (literals or identifiers)
+    if (
+        len(root_node.children) == 0 or 
+        root_node.type in ["string_literal", "string", "number_literal", "template_string"]
+    ) and root_node.type != "comment":
+        idx, code = index_to_code[(root_node.start_point, root_node.end_point)]
+        if root_node.type == code:  # If node type matches code (e.g., literal), no DFG edge
+            return [], states
+        elif code in states:  # Variable reuse
+            return [(code, idx, "comesFrom", [code], states[code].copy())], states
+        else:  # New variable
+            if root_node.type == "identifier":
+                states[code] = [idx]
+            return [(code, idx, "comesFrom", [], [])], states
+    
+    # Variable declarations (e.g., let x: number = 5)
+    elif root_node.type in def_statement:
+        name = root_node.child_by_field_name("name")  # The identifier (e.g., 'x')
+        value = root_node.child_by_field_name("value")  # The initializer (e.g., '5')
+        DFG = []
+        if value is None:  # No initializer (e.g., let x: number)
+            indexs = tree_to_variable_index(name, index_to_code)
+            for index in indexs:
+                idx, code = index_to_code[index]
+                DFG.append((code, idx, "comesFrom", [], []))
+                states[code] = [idx]
+            return sorted(DFG, key=lambda x: x[1]), states
+        else:  # With initializer (e.g., let x: number = 5)
+            name_indexs = tree_to_variable_index(name, index_to_code)
+            value_indexs = tree_to_variable_index(value, index_to_code)
+            temp, states = DFG_typescript(value, index_to_code, states)  # Recurse on initializer
+            DFG += temp
+            for index1 in name_indexs:
+                idx1, code1 = index_to_code[index1]
+                for index2 in value_indexs:
+                    idx2, code2 = index_to_code[index2]
+                    DFG.append((code1, idx1, "comesFrom", [code2], [idx2]))
+                states[code1] = [idx1]
+            return sorted(DFG, key=lambda x: x[1]), states
+    
+    # Assignments (e.g., x = 5 or x += 2)
+    elif root_node.type in assignment:
+        left_nodes = root_node.child_by_field_name("left")
+        right_nodes = root_node.child_by_field_name("right")
+        DFG = []
+        temp, states = DFG_typescript(right_nodes, index_to_code, states)  # Recurse on right side
+        DFG += temp
+        name_indexs = tree_to_variable_index(left_nodes, index_to_code)
+        value_indexs = tree_to_variable_index(right_nodes, index_to_code)
+        for index1 in name_indexs:
+            idx1, code1 = index_to_code[index1]
+            for index2 in value_indexs:
+                idx2, code2 = index_to_code[index2]
+                DFG.append((code1, idx1, "computedFrom", [code2], [idx2]))
+            states[code1] = [idx1]
+        return sorted(DFG, key=lambda x: x[1]), states
+    
+    # Increment/decrement (e.g., i++ or ++i)
+    elif root_node.type in increment_statement:
+        DFG = []
+        indexs = tree_to_variable_index(root_node, index_to_code)
+        for index1 in indexs:
+            idx1, code1 = index_to_code[index1]
+            for index2 in indexs:
+                idx2, code2 = index_to_code[index2]
+                DFG.append((code1, idx1, "computedFrom", [code2], [idx2]))
+            states[code1] = [idx1]
+        return sorted(DFG, key=lambda x: x[1]), states
+    
+    # If statements
+    elif root_node.type in if_statement:
+        DFG = []
+        current_states = states.copy()
+        others_states = []
+        tag = False
+        for child in root_node.children:
+            if child.type == "else":  # Handle else clause
+                tag = True
+            if child.type not in ["else"]:  # Process condition and consequence
+                temp, current_states = DFG_typescript(child, index_to_code, current_states)
+                DFG += temp
+            else:  # Process alternative (else branch)
+                temp, new_states = DFG_typescript(child, index_to_code, states)
+                DFG += temp
+                others_states.append(new_states)
+        others_states.append(current_states)
+        if not tag:  # No else branch, include original states
+            others_states.append(states)
+        new_states = {}
+        for dic in others_states:
+            for key in dic:
+                if key not in new_states:
+                    new_states[key] = dic[key].copy()
+                else:
+                    new_states[key] += dic[key]
+        for key in new_states:
+            new_states[key] = sorted(list(set(new_states[key])))
+        return sorted(DFG, key=lambda x: x[1]), new_states
+    
+    # For loops
+    elif root_node.type in for_statement:
+        DFG = []
+        for child in root_node.children:
+            temp, states = DFG_typescript(child, index_to_code, states)
+            DFG += temp
+        flag = False
+        for child in root_node.children:
+            if flag:  # Process body after initialization
+                temp, states = DFG_typescript(child, index_to_code, states)
+                DFG += temp
+            elif child.type == "variable_declaration":  # Detect initialization
+                flag = True
+        dic = {}
+        for x in DFG:
+            if (x[0], x[1], x[2]) not in dic:
+                dic[(x[0], x[1], x[2])] = [x[3], x[4]]
+            else:
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
+        return sorted(DFG, key=lambda x: x[1]), states
+    
+    # For...in loops (TypeScript supports this from JavaScript)
+    elif root_node.type in enhanced_for_statement:
+        pattern = root_node.child_by_field_name("left")  # The variable (e.g., key in for..in)
+        value = root_node.child_by_field_name("right")  # The iterable (e.g., obj in for..in)
+        body = root_node.child_by_field_name("body")  # The loop body
+        DFG = []
+        for i in range(2):  # Simulate two iterations for data flow
+            temp, states = DFG_typescript(value, index_to_code, states)
+            DFG += temp
+            name_indexs = tree_to_variable_index(pattern, index_to_code)
+            value_indexs = tree_to_variable_index(value, index_to_code)
+            for index1 in name_indexs:
+                idx1, code1 = index_to_code[index1]
+                for index2 in value_indexs:
+                    idx2, code2 = index_to_code[index2]
+                    DFG.append((code1, idx1, "computedFrom", [code2], [idx2]))
+                states[code1] = [idx1]
+            temp, states = DFG_typescript(body, index_to_code, states)
+            DFG += temp
+        dic = {}
+        for x in DFG:
+            if (x[0], x[1], x[2]) not in dic:
+                dic[(x[0], x[1], x[2])] = [x[3], x[4]]
+            else:
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
+        return sorted(DFG, key=lambda x: x[1]), states
+    
+    # While loops
+    elif root_node.type in while_statement:
+        DFG = []
+        for i in range(2):  # Simulate two iterations
+            for child in root_node.children:
+                temp, states = DFG_typescript(child, index_to_code, states)
+                DFG += temp
+        dic = {}
+        for x in DFG:
+            if (x[0], x[1], x[2]) not in dic:
+                dic[(x[0], x[1], x[2])] = [x[3], x[4]]
+            else:
+                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
+                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
+        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
+        return sorted(DFG, key=lambda x: x[1]), states
+    
+    # Default case: Recursively process children
+    else:
+        DFG = []
+        for child in root_node.children:
+            if child.type in do_first_statement:
+                temp, states = DFG_typescript(child, index_to_code, states)
+                DFG += temp
+        for child in root_node.children:
+            if child.type not in do_first_statement:
+                temp, states = DFG_typescript(child, index_to_code, states)
+                DFG += temp
+        return sorted(DFG, key=lambda x: x[1]), states
+
+
 def DFG_rust(root_node, index_to_code, states):
     assignment = ["assignment_expression", "compound_assignment_expr", "let_expression"]
     def_statement = ["function_item"]

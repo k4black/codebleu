@@ -20,6 +20,7 @@ AVAILABLE_LANGS = [
     "go",
     "ruby",
     "rust",
+    "typescript"
 ]  # keywords available
 
 
@@ -138,6 +139,10 @@ def get_tree_sitter_language(lang: str) -> Language:
             import tree_sitter_javascript
 
             return Language(tree_sitter_javascript.language())
+        elif lang == "typescript":
+            import tree_sitter_typescript
+
+            return Language(tree_sitter_typescript.language_tsx())
         elif lang == "c_sharp":
             import tree_sitter_c_sharp
 
