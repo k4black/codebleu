@@ -53,6 +53,17 @@ def test_exact_match_works_for_all_langs(lang: str) -> None:
 
 
 @pytest.mark.parametrize("lang", AVAILABLE_LANGS)
+def test_matching_text_fragments_for_all_langs(lang: str) -> None:
+    # Generated output can contain fragments that do not form a complete program.
+    fragment = "some matching string a couple of times"
+    result = calc_codebleu([fragment], [fragment], lang)
+    assert result["ngram_match_score"] == 1.0
+    assert result["syntax_match_score"] == 1.0
+    assert result["dataflow_match_score"] == 0.0
+    assert result["codebleu"] == 1.0
+
+
+@pytest.mark.parametrize("lang", AVAILABLE_LANGS)
 def test_simple_cases_work_for_all_langs(lang: str) -> None:
     reference = LANGUAGE_SAMPLES[lang]
     prediction = reference.replace("foo", "bar").replace("x", "y")
