@@ -37,6 +37,9 @@ def calc_codebleu(
     assert len(weights) == 4, "weights should be a tuple of 4 floats (alpha, beta, gamma, theta)"
     assert keywords_dir.exists(), f"keywords_dir {keywords_dir} does not exist"
 
+    if not references or any(isinstance(reference, list) and not reference for reference in references):
+        raise ValueError("references must contain at least one sample and one reference per sample")
+
     # get the tree-sitter language for a given language
     tree_sitter_language = get_tree_sitter_language(lang)
 
@@ -63,8 +66,11 @@ def calc_codebleu(
         return {token: 1 if token in key_word_list else 0.2 for token in reference_tokens}
 
     tokenized_refs_with_weights = [
-        [[reference_tokens, make_weights(reference_tokens, keywords)] for reference_tokens in reference]
-        for reference in tokenized_refs
+        [
+            [reference_tokens, make_weights(reference_tokens + hypothesis_tokens, keywords)]
+            for reference_tokens in reference
+        ]
+        for reference, hypothesis_tokens in zip(tokenized_refs, tokenized_hyps)
     ]
 
     weighted_ngram_match_score = weighted_ngram_match.corpus_bleu(tokenized_refs_with_weights, tokenized_hyps)
@@ -84,7 +90,7 @@ def calc_codebleu(
         alpha * ngram_match_score
         + beta * weighted_ngram_match_score
         + gamma * syntax_match_score
-        + theta * (dataflow_match_score or 1)
+        + theta * dataflow_match_score
     )
 
     return {

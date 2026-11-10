@@ -111,43 +111,19 @@ def get_data_flow(code, parser):
     except Exception:
         code.split()
         dfg = []
-    # merge nodes
-    dic = {}
-    for d in dfg:
-        if d[1] not in dic:
-            dic[d[1]] = d
-        else:
-            dic[d[1]] = (
-                d[0],
-                d[1],
-                d[2],
-                list(set(dic[d[1]][3] + d[3])),
-                list(set(dic[d[1]][4] + d[4])),
-            )
-    DFG = []
-    for d in dic:
-        DFG.append(dic[d])
-    dfg = DFG
-    return dfg
+    # Rebuild paired dependencies from token positions, including repeated names.
+    names_by_position = {item[1]: item[0] for item in dfg}
+    merged = {}
+    for name, position, relationship, _, parents in dfg:
+        previous = merged.get(position)
+        positions = sorted(set(parents + (previous[4] if previous else [])))
+        names = [names_by_position.get(parent, code_tokens[parent]) for parent in positions]
+        merged[position] = (name, position, relationship, names, positions)
+    return [merged[position] for position in sorted(merged)]
 
 
 def normalize_dataflow_item(dataflow_item):
-    var_name = dataflow_item[0]
-    dataflow_item[1]
-    relationship = dataflow_item[2]
-    par_vars_name_list = dataflow_item[3]
-    dataflow_item[4]
-
-    var_names = list(set(par_vars_name_list + [var_name]))
-    norm_names = {}
-    for i in range(len(var_names)):
-        norm_names[var_names[i]] = "var_" + str(i)
-
-    norm_var_name = norm_names[var_name]
-    relationship = dataflow_item[2]
-    norm_par_vars_name_list = [norm_names[x] for x in par_vars_name_list]
-
-    return (norm_var_name, relationship, norm_par_vars_name_list)
+    return normalize_dataflow([dataflow_item])[0]
 
 
 def normalize_dataflow(dataflow):
