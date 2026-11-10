@@ -27,6 +27,11 @@ Relevant official files:
 - [AST match](https://github.com/microsoft/CodeXGLUE/blob/50a483084fd5641889e1afb1c4c253f3987b5660/Code-Code/code-to-code-trans/evaluator/CodeBLEU/syntax_match.py)
 - [Data-flow match](https://github.com/microsoft/CodeXGLUE/blob/50a483084fd5641889e1afb1c4c253f3987b5660/Code-Code/code-to-code-trans/evaluator/CodeBLEU/dataflow_match.py)
 
+The lexical comparison ran the pinned weighted evaluator with its n-gram helper import redirected to this package's equivalent helper.
+The original parser API does not load with current Tree-sitter bindings.
+The AST comparison therefore uses source inspection and tests against the declared modern grammars.
+It does not claim to reproduce the original parser binaries.
+
 ## Decisions where sources disagree
 
 Section 3.1 specifies `N = 1` and `w_n = 1` for weighted matching.
@@ -54,7 +59,7 @@ Rows correspond to the existing test cases from the official example and paper e
 | Paper example 2, renamed variable | 0.757139 | 55/58 | 1 | 1 | 0.926354 |
 
 For the missing-brace example, weighted precision is `50/57` and the brevity penalty is `exp(1 - 34/33)`.
-The fixed official weighted evaluator returns `0.777549`, `0.749138`, and `0.764608` for these three examples.
+The pinned official weighted evaluator returns `0.777549`, `0.749138`, and `0.764608` for these three examples.
 Those values differ from weighted unigram precision.
 The paper's AST example uses 21 reference subtrees. The current Java grammar produces 19.
 Clipping repeated subtree occurrences also changes the numerator.
