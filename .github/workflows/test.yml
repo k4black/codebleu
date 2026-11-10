@@ -24,14 +24,12 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: python -m pip install -e '.[all,test]'
-      - name: Check imports
-        run: python -m isort codebleu tests --check
-      - name: Check formatting
-        run: python -m black codebleu tests --check
-      - name: Check lint
+      - name: Check lint and imports
         run: python -m ruff check codebleu tests
+      - name: Check formatting
+        run: python -m ruff format codebleu tests --check
       - name: Check types
-        run: python -m mypy codebleu
+        run: python -m ty check codebleu
 
   fast-tests-python:
     runs-on: ubuntu-latest

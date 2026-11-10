@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Automate release PRs and GitHub releases with Release Please and a GitHub App token.
+- Replace Black, isort, and mypy with Ruff lint, Ruff format, and ty.
+
 - Require Python 3.11 or later. Test Python 3.11 through 3.15 across Linux, Windows, and ARM and Intel macOS.
 - Update Tree-sitter to 0.26.1 and all language grammars to current compatible releases.
 - Update build, test, lint, Evaluate, and GitHub Actions dependencies. Remove unused test dependencies and obsolete stubs.
