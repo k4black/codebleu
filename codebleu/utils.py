@@ -20,6 +20,9 @@ AVAILABLE_LANGS = [
     "go",
     "ruby",
     "rust",
+    "typescript",
+    "tsx",
+    "fortran",
 ]  # keywords available
 
 
@@ -170,6 +173,17 @@ def get_tree_sitter_language(lang: str) -> Language:
             import tree_sitter_rust
 
             return Language(tree_sitter_rust.language())
+        elif lang in ["typescript", "tsx"]:
+            import tree_sitter_typescript
+
+            language = (
+                tree_sitter_typescript.language_tsx() if lang == "tsx" else tree_sitter_typescript.language_typescript()
+            )
+            return Language(language)
+        elif lang == "fortran":
+            import tree_sitter_fortran
+
+            return Language(tree_sitter_fortran.language())
         else:
             assert False, "Not reachable"
     except ImportError:

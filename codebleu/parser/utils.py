@@ -46,6 +46,9 @@ def remove_comments_and_docstrings(source, lang):
             if x.strip() != "":
                 temp.append(x)
         return "\n".join(temp)
+    elif lang == "fortran":
+        pattern = r"'(?:(?:'')|[^'])*'|\"(?:(?:\"\")|[^\"])*\"|![^\n]*"
+        return re.sub(pattern, lambda match: " " if match.group(0).startswith("!") else match.group(0), source)
     elif lang in ["ruby"]:
         return source
     else:
@@ -81,6 +84,13 @@ def tree_to_token_index(root_node):
 
 
 def tree_to_variable_index(root_node, index_to_code):
+    if (
+        root_node.parent is not None
+        and root_node.parent.type in ["jsx_opening_element", "jsx_closing_element", "jsx_self_closing_element"]
+        and root_node == root_node.parent.child_by_field_name("name")
+        and root_node.text[:1].islower()
+    ):
+        return []
     if (
         len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":

@@ -1060,7 +1060,7 @@ def DFG_php(root_node, index_to_code, states):
 
 
 def DFG_javascript(root_node, index_to_code, states):
-    assignment = ["assignment_pattern", "augmented_assignment_expression"]
+    assignment = ["assignment_pattern", "assignment_expression", "augmented_assignment_expression"]
     def_statement = ["variable_declarator"]
     increment_statement = ["update_expression"]
     if_statement = ["if_statement", "else"]
@@ -1072,7 +1072,7 @@ def DFG_javascript(root_node, index_to_code, states):
         len(root_node.children) == 0 or root_node.type in ["string_literal", "string", "character_literal"]
     ) and root_node.type != "comment":
         idx, code = index_to_code[(root_node.start_point, root_node.end_point)]
-        if root_node.type == code:
+        if root_node.type == code or not tree_to_variable_index(root_node, index_to_code):
             return [], states
         elif code in states:
             return [(code, idx, "comesFrom", [code], states[code].copy())], states
@@ -1111,6 +1111,8 @@ def DFG_javascript(root_node, index_to_code, states):
         DFG += temp
         name_indexs = tree_to_variable_index(left_nodes, index_to_code)
         value_indexs = tree_to_variable_index(right_nodes, index_to_code)
+        if root_node.type == "augmented_assignment_expression":
+            value_indexs += tree_to_variable_index(left_nodes, index_to_code)
         for index1 in name_indexs:
             idx1, code1 = index_to_code[index1]
             for index2 in value_indexs:
@@ -1217,10 +1219,9 @@ def DFG_javascript(root_node, index_to_code, states):
 
 def DFG_rust(root_node, index_to_code, states):
     assignment = ["assignment_expression", "compound_assignment_expr", "let_expression"]
-    def_statement = ["function_item"]
+    def_statement = ["let_declaration", "let_condition", "parameter"]
     if_statement = ["if_expression", "if_let_expression", "match_expression", "else"]
-    for_statement = ["for_expression"]
-    enhanced_for_statement = ["for_each_statement"]
+    enhanced_for_statement = ["for_expression"]
     while_statement = ["while_expression", "while_let_expression", "loop_expression"]
     do_first_statement = []
     states = states.copy()
@@ -1237,12 +1238,8 @@ def DFG_rust(root_node, index_to_code, states):
                 states[code] = [idx]
             return [(code, idx, "comesFrom", [], [])], states
     elif root_node.type in def_statement:
-        if len(root_node.children) >= 3:
-            name = root_node.children[1]
-            value = root_node.children[2]
-        else:
-            name = root_node.children[1]
-            value = None
+        name = root_node.child_by_field_name("pattern")
+        value = root_node.child_by_field_name("value")
         DFG = []
         if value is None:
             indexs = tree_to_variable_index(name, index_to_code)
@@ -1271,6 +1268,8 @@ def DFG_rust(root_node, index_to_code, states):
         DFG += temp
         name_indexs = tree_to_variable_index(left_nodes, index_to_code)
         value_indexs = tree_to_variable_index(right_nodes, index_to_code)
+        if root_node.type == "compound_assignment_expr":
+            value_indexs += tree_to_variable_index(left_nodes, index_to_code)
         for index1 in name_indexs:
             idx1, code1 = index_to_code[index1]
             for index2 in value_indexs:
@@ -1310,30 +1309,9 @@ def DFG_rust(root_node, index_to_code, states):
         for key in new_states:
             new_states[key] = sorted(list(set(new_states[key])))
         return sorted(DFG, key=lambda x: x[1]), new_states
-    elif root_node.type in for_statement:
-        DFG = []
-        for child in root_node.children:
-            temp, states = DFG_rust(child, index_to_code, states)
-            DFG += temp
-        flag = False
-        for child in root_node.children:
-            if flag:
-                temp, states = DFG_rust(child, index_to_code, states)
-                DFG += temp
-            elif child.type == "local_variable_declaration":
-                flag = True
-        dic = {}
-        for x in DFG:
-            if (x[0], x[1], x[2]) not in dic:
-                dic[(x[0], x[1], x[2])] = [x[3], x[4]]
-            else:
-                dic[(x[0], x[1], x[2])][0] = list(set(dic[(x[0], x[1], x[2])][0] + x[3]))
-                dic[(x[0], x[1], x[2])][1] = sorted(list(set(dic[(x[0], x[1], x[2])][1] + x[4])))
-        DFG = [(x[0], x[1], x[2], y[0], y[1]) for x, y in sorted(dic.items(), key=lambda t: t[0][1])]
-        return sorted(DFG, key=lambda x: x[1]), states
     elif root_node.type in enhanced_for_statement:
-        name = root_node.child_by_field_name("left")
-        value = root_node.child_by_field_name("right")
+        name = root_node.child_by_field_name("pattern")
+        value = root_node.child_by_field_name("value")
         body = root_node.child_by_field_name("body")
         DFG = []
         for i in range(2):
@@ -1385,3 +1363,79 @@ def DFG_rust(root_node, index_to_code, states):
                 DFG += temp
 
         return sorted(DFG, key=lambda x: x[1]), states
+
+
+def DFG_fortran(root_node, index_to_code, states):
+    """Extract variable dependencies from the free-form Fortran grammar."""
+    states = states.copy()
+    if root_node.type in ["comment", "end_function_statement", "end_subroutine_statement"]:
+        return [], states
+    if not root_node.children:
+        if root_node.type != "identifier":
+            return [], states
+        idx, name = index_to_code[(root_node.start_point, root_node.end_point)]
+        name = name.lower()
+        if name in states:
+            return [(name, idx, "comesFrom", [name], states[name].copy())], states
+        states[name] = [idx]
+        return [(name, idx, "comesFrom", [], [])], states
+
+    if root_node.type in ["assignment_statement", "init_declarator", "loop_control_expression"]:
+        if root_node.type == "loop_control_expression":
+            left = root_node.named_children[0]
+            values = root_node.named_children[1:]
+        else:
+            left = root_node.child_by_field_name("left")
+            values = [root_node.child_by_field_name("right")]
+        dfg = []
+        dependencies = []
+        for value in values:
+            temp, states = DFG_fortran(value, index_to_code, states)
+            dfg += temp
+            for index in tree_to_variable_index(value, index_to_code):
+                idx, name = index_to_code[index]
+                dependencies.append((name if name.startswith(("'", '"')) else name.lower(), idx))
+        for index in tree_to_variable_index(left, index_to_code):
+            idx, name = index_to_code[index]
+            name = name.lower()
+            dfg.append((name, idx, "computedFrom", [x[0] for x in dependencies], [x[1] for x in dependencies]))
+            states[name] = [idx]
+        return sorted(dfg, key=lambda x: x[1]), states
+
+    if root_node.type == "if_statement":
+        dfg = []
+        condition, *children = root_node.named_children
+        temp, states = DFG_fortran(condition, index_to_code, states)
+        dfg += temp
+        branch_states = []
+        current_states = states.copy()
+        has_else = False
+        for child in children:
+            if child.type in ["else_clause", "elseif_clause"]:
+                temp, other_states = DFG_fortran(child, index_to_code, states)
+                branch_states.append(other_states)
+                has_else |= child.type == "else_clause"
+            else:
+                temp, current_states = DFG_fortran(child, index_to_code, current_states)
+            dfg += temp
+        branch_states.append(current_states)
+        if not has_else:
+            branch_states.append(states)
+        merged = {}
+        for branch in branch_states:
+            for name, positions in branch.items():
+                merged[name] = sorted(set(merged.get(name, []) + positions))
+        return sorted(dfg, key=lambda x: x[1]), merged
+
+    if root_node.type in ["function_statement", "subroutine_statement"]:
+        children = root_node.children_by_field_name("parameters")
+    elif root_node.type == "variable_declaration":
+        children = root_node.children_by_field_name("declarator")
+    else:
+        children = root_node.named_children
+    dfg = []
+    for _ in range(2 if root_node.type == "do_loop" else 1):
+        for child in children:
+            temp, states = DFG_fortran(child, index_to_code, states)
+            dfg += temp
+    return sorted(dfg, key=lambda x: x[1]), states

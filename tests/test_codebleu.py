@@ -36,6 +36,9 @@ LANGUAGE_SAMPLES = {
     "go": "package main\nfunc foo ( x int ) int { return x }",
     "ruby": "def foo ( x )\n    x\nend",
     "rust": "fn foo ( x : i32 ) -> i32 { x }",
+    "typescript": "function foo ( x : number ) : number { return x ; }",
+    "tsx": "function foo ( x : number ) { return <span>{x}</span> ; }",
+    "fortran": "function foo ( x ) result ( z )\ninteger :: x , z\nz = x\nend function foo",
 }
 
 

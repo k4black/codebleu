@@ -16,7 +16,7 @@ pinned: false
 
 This repository contains an unofficial `CodeBLEU` implementation that supports `Linux`, `MacOS` and `Windows`. It is available through `PyPI` and the `evaluate` library.
 
-Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`, `Go`, `Ruby`, `Rust`.
+Available for: `Python`, `C`, `C#`, `C++`, `Java`, `JavaScript`, `PHP`, `Go`, `Ruby`, `Rust`, `TypeScript`, `TSX`, and `Fortran`.
 
 ---
 
@@ -40,7 +40,7 @@ The metric has shown higher correlation with human evaluation than `BLEU` and `a
 
 - `refarences` (`list[str]` or `list[list[str]]`): reference code
 - `predictions` (`list[str]`) predicted code
-- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp c, cpp, javascript, java, php, go and ruby at the moment)
+- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp, c, cpp, javascript, java, php, go, ruby, rust, typescript, tsx, and fortran)
 - `weights` (`tuple[float,float,float,float]`): weights of the `ngram_match`, `weighted_ngram_match`, `syntax_match`, and `dataflow_match` respectively, defaults to `(0.25, 0.25, 0.25, 0.25)`
 - `tokenizer` (`callable`): to split code string to tokens, defaults to `s.split()`
 
