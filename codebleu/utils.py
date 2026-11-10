@@ -183,7 +183,8 @@ def get_tree_sitter_language(lang: str) -> Language:
         elif lang == "fortran":
             import tree_sitter_fortran
 
-            return Language(tree_sitter_fortran.language())
+            # shortcut: Fortran 0.6 returns an integer pointer, remove this ignore when it exports a capsule.
+            return Language(tree_sitter_fortran.language())  # ty: ignore[deprecated]
         else:
             assert False, "Not reachable"
     except ImportError:
