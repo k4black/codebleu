@@ -13,3 +13,8 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
+
+  - package-ecosystem: "pip"
+    directory: "/evaluate_app"
+    schedule:
+      interval: "weekly"

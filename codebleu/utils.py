@@ -145,10 +145,7 @@ def get_tree_sitter_language(lang: str) -> Language:
         elif lang == "php":
             import tree_sitter_php
 
-            try:
-                return Language(tree_sitter_php.language())  # type: ignore[attr-defined]
-            except AttributeError:
-                return Language(tree_sitter_php.language_php())
+            return Language(tree_sitter_php.language_php())
         elif lang == "c":
             import tree_sitter_c
 
