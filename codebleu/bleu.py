@@ -8,6 +8,7 @@
 # For license information, see LICENSE.TXT
 
 """BLEU score implementation."""
+
 import math
 from collections import Counter
 

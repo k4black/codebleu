@@ -101,8 +101,11 @@ Note: `lang` is required;
 
 [//]: # (*Note any known limitations or biases that the metric has, with links and references if possible.*)
 
-This library requires `so` file compilation with tree-sitter, so it is platform dependent.  
-Currently available for `Linux` (manylinux), `MacOS` and `Windows` with Python 3.8+.
+CodeBLEU supports Python 3.11 through 3.15 on Linux, macOS, and Windows.
+Install compatible grammars with `pip install "codebleu[all]"`.
+Pip builds packages from source if a compatible wheel is unavailable.
+A source build requires a C compiler.
+Grammar versions can affect AST shapes and scores.
 
 
 ## Citation

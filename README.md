@@ -27,8 +27,10 @@ The metric has shown higher correlation with human evaluation than `BLEU` and `a
 
 ## Installation
 
-This library requires `so` file compilation with tree-sitter, so it is platform dependent.  
-Currently available for `Linux` (manylinux), `MacOS` and `Windows` with Python 3.8+.
+CodeBLEU supports Python 3.11 through 3.15 on Linux, macOS, and Windows.
+CI tests both ARM and Intel macOS runners.
+Tree-sitter 0.26.1 or later in the 0.26 series is required.
+Older Python versions are no longer supported.
 
 The metrics is available as [pip package](https://pypi.org/project/codebleu/) and can be installed as indicated above:
 ```bash
@@ -48,11 +50,14 @@ Or you can install all languages:
 pip install codebleu[all]
 ```
 
-Note: At the moment (May 2024) precompiled languages are NOT available for arm64 (M1) MacOS, so you have to install and build tree-sitter languages manually, for example:
-```bash
-pip install pip install git+https://github.com/tree-sitter/tree-sitter-python.git
-```
+The `all` extra installs compatible grammar releases from PyPI.
+Individual grammars must match the versions declared in `pyproject.toml`.
+Pip builds packages from source if a compatible wheel is unavailable.
+A source build requires a C compiler.
 
+Grammar updates can change AST shapes and metric scores.
+Record the CodeBLEU, Tree-sitter, and grammar versions with evaluation results.
+This update preserves the metric formulas. Formula corrections will use separate PRs.
 
 ## Usage 
 
@@ -75,7 +80,7 @@ print(result)
 where `calc_codebleu` takes the following arguments:
 - `references` (`list[str]` or `list[list[str]]`): reference code
 - `predictions` (`list[str]`) predicted code
-- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp c, cpp, javascript, java, php, go and ruby at the moment)
+- `lang` (`str`): code language, see `codebleu.AVAILABLE_LANGS` for available languages (python, c_sharp, c, cpp, javascript, java, php, go, ruby, and rust)
 - `weights` (`tuple[float,float,float,float]`): weights of the `ngram_match`, `weighted_ngram_match`, `syntax_match`, and `dataflow_match` respectively, defaults to `(0.25, 0.25, 0.25, 0.25)`
 - `tokenizer` (`callable`): to split code string to tokens, defaults to `s.split()`
 
@@ -110,11 +115,11 @@ Make your own fork and clone it:
 git clone https://github.com/k4black/codebleu
 ```
 
-For development, you need to install library with `all` precompiled languages and `test` extra:  
-(require internet connection to download tree-sitter)
+For development, create a virtual environment and install the language and test extras:
 ```bash
-python -m pip install -e .[all,test]
-python -m pip install -e .\[all,test\]  # for macos
+python -m venv .venv
+# Activate the virtual environment for your shell.
+python -m pip install -e ".[all,test]"
 ```
 
 For testing just run pytest:
@@ -124,11 +129,17 @@ python -m pytest
 
 To perform a style check, run:
 ```bash
-python -m isort codebleu --check
-python -m black codebleu --check
-python -m ruff codebleu
+python -m isort codebleu tests --check
+python -m black codebleu tests --check
+python -m ruff check codebleu tests
 python -m mypy codebleu
 ```
+
+
+For a release, first merge a PR that updates `VERSION` and `CHANGELOG.md`.
+Publish a GitHub release from that commit with a tag that matches `VERSION`.
+The publish workflow checks the version and builds from the release tag.
+The workflow does not change the protected branch or move tags.
 
 
 ## License

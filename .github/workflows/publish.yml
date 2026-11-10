@@ -3,70 +3,41 @@ name: Publish
 on:
   release:
     types:
-      - created
+      - published
 
+permissions:
+  contents: read
 
 jobs:
-  update-version-and-changelog:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-      - name: Update version file
-        run: |
-          cat VERSION
-          echo "VERSION ${{ github.ref_name }}"
-          echo -n "${{ github.ref_name }}" > VERSION
-      - name: Update changelog file
-        run: |
-          echo "CHANGELOG"
-      - name: Commit updated files
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git add VERSION CHANGELOG.md
-          git commit -m "Auto version and changelog update [${{ github.ref_name }}]"
-          git push origin
-      - name: Tag new commit
-        run: |
-          git tag --force ${{ github.ref_name }}
-          git push origin ${{ github.ref_name }} --force
-
-  update-release-github:
-    needs: update-version-and-changelog
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref_name }}
-      - name: Update Release description
-        run: |
-          echo "VERSION"
-          echo "CHANGELOG"
-
   release-python-package:
-    needs: [update-version-and-changelog]
     runs-on: ubuntu-latest
     environment:
       name: pypi
       url: https://pypi.org/p/codebleu
     permissions:
-      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.15'
+      - name: Check release version
+        run: test "$(cat VERSION)" = "${GITHUB_REF_NAME#v}"
       - name: Build wheel
         run: |
           python3 -m pip install --upgrade build
           python3 -m build --wheel --sdist --outdir ./dist
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: pypa/gh-action-pypi-publish@v1.14.3
 
   sync-to-hf-hub:
-    needs: update-version-and-changelog
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}
       - name: Download hf repo
         run: |
           git config --global user.name 'github-actions'
