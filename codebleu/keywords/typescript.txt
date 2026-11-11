@@ -1,4 +1,3 @@
-True
 abstract
 any
 as
@@ -28,6 +27,7 @@ get
 if
 implements
 import
+in
 infer
 instanceof
 interface
@@ -41,6 +41,7 @@ new
 null
 number
 object
+of
 package
 private
 protected
@@ -56,6 +57,7 @@ symbol
 target
 this
 throw
+true
 try
 typeof
 var

@@ -86,6 +86,7 @@ def tree_to_token_index(root_node):
 def tree_to_variable_index(root_node, index_to_code):
     if (
         root_node.parent is not None
+        and root_node.type in ["identifier", "jsx_namespace_name"]
         and root_node.parent.type in ["jsx_opening_element", "jsx_closing_element", "jsx_self_closing_element"]
         and root_node == root_node.parent.child_by_field_name("name")
         and root_node.text[:1].islower()

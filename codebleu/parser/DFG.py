@@ -1277,6 +1277,23 @@ def DFG_rust(root_node, index_to_code, states):
                 DFG.append((code1, idx1, "computedFrom", [code2], [idx2]))
             states[code1] = [idx1]
         return sorted(DFG, key=lambda x: x[1]), states
+    elif root_node.type == "if_expression":
+        condition = root_node.child_by_field_name("condition")
+        DFG, states = DFG_rust(condition, index_to_code, states)
+        branches = []
+        for field in ["consequence", "alternative"]:
+            branch = root_node.child_by_field_name(field)
+            if branch is None:
+                branches.append(states)
+            else:
+                temp, branch_states = DFG_rust(branch, index_to_code, states)
+                DFG += temp
+                branches.append(branch_states)
+        merged = {}
+        for branch in branches:
+            for name, positions in branch.items():
+                merged[name] = sorted(set(merged.get(name, []) + positions))
+        return sorted(DFG, key=lambda x: x[1]), merged
     elif root_node.type in if_statement:
         DFG = []
         current_states = states.copy()
@@ -1388,6 +1405,19 @@ def DFG_fortran(root_node, index_to_code, states):
             left = root_node.child_by_field_name("left")
             values = [root_node.child_by_field_name("right")]
         dfg = []
+        targets = []
+        pending = [left]
+        while pending:
+            node = pending.pop()
+            if node.type == "call_expression":
+                for subscript in node.named_children[1:]:
+                    temp, states = DFG_fortran(subscript, index_to_code, states)
+                    dfg += temp
+                pending.append(node.named_children[0])
+            elif node.children:
+                pending.extend(reversed(node.named_children))
+            else:
+                targets += tree_to_variable_index(node, index_to_code)
         dependencies = []
         for value in values:
             temp, states = DFG_fortran(value, index_to_code, states)
@@ -1395,7 +1425,7 @@ def DFG_fortran(root_node, index_to_code, states):
             for index in tree_to_variable_index(value, index_to_code):
                 idx, name = index_to_code[index]
                 dependencies.append((name if name.startswith(("'", '"')) else name.lower(), idx))
-        for index in tree_to_variable_index(left, index_to_code):
+        for index in targets:
             idx, name = index_to_code[index]
             name = name.lower()
             dfg.append((name, idx, "computedFrom", [x[0] for x in dependencies], [x[1] for x in dependencies]))

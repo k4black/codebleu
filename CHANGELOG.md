@@ -2,10 +2,6 @@
 
 ## Unreleased
 
-- Add TypeScript, TSX, and free-form Fortran parsing and data-flow support.
-- Fix Rust function bodies, local bindings, parameters, and for-loop dependencies.
-- Fix CLI invocation, multiple references, and language choices.
-
 - Require Python 3.11 or later. Test Python 3.11 through 3.15 across Linux, Windows, and ARM and Intel macOS.
 - Update Tree-sitter to 0.26.1 and all language grammars to current compatible releases.
 - Update build, test, lint, Evaluate, and GitHub Actions dependencies. Remove unused test dependencies and obsolete stubs.

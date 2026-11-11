@@ -88,3 +88,65 @@ def test_fortran_keeps_both_branch_definitions() -> None:
     }
     _, states = DFG_fortran(root, index_to_code, {})
     assert len(states["y"]) == 2
+
+
+@pytest.mark.parametrize(
+    ("body", "definitions"),
+    [
+        ("if x > 0 { y = x; } else { y = 1; }", [21, 28]),
+        ("if x > 0 { y = x; }", [12, 21]),
+        ("if x > 0 { y = x; } else if x < 0 { y = 2; } else { y = 1; }", [21, 32, 39]),
+    ],
+)
+def test_rust_branch_reads_reach_each_definition(body: str, definitions: list[int]) -> None:
+    code = f"fn f(x: i32) -> i32 {{ let mut y = 0; {body} y }}"
+    parser = Parser(get_tree_sitter_language("rust"))
+    assert not parser.parse(code.encode("utf-8")).root_node.has_error
+    dataflow = get_data_flow(code, [parser, dfg_function["rust"]])
+    assert dataflow[-1][0] == "y"
+    assert dataflow[-1][4] == definitions
+
+
+@pytest.mark.parametrize("target", ["a(i)", "a(i + 1)", "a(i:i+1)"])
+def test_fortran_array_assignment_preserves_index_definition(target: str) -> None:
+    code = f"program main\ninteger :: a(3), i = 1, x = 2\n{target} = x\nprint *, i\nend program"
+    parser = Parser(get_tree_sitter_language("fortran"))
+    assert not parser.parse(code.encode("utf-8")).root_node.has_error
+    dataflow = get_data_flow(code, [parser, dfg_function["fortran"]])
+    assert not any(item[0] == "i" and item[2] == "computedFrom" and "x" in item[3] for item in dataflow)
+    assert dataflow[-1][0] == "i"
+    assert dataflow[-1][4] == [9]
+
+
+@pytest.mark.parametrize("element", ["<components.Button />", "<components.Button></components.Button>"])
+def test_tsx_qualified_component_keeps_dependency(element: str) -> None:
+    code = f"const components = {{ Button: () => null }}; const node = {element};"
+    parser = Parser(get_tree_sitter_language("tsx"))
+    assert not parser.parse(code.encode("utf-8")).root_node.has_error
+    dataflow = get_data_flow(code, [parser, dfg_function["tsx"]])
+    assert any(item[0] == "node" and "components" in item[3] for item in dataflow)
+
+
+@pytest.mark.parametrize(("token", "is_keyword"), [("true", True), ("in", True), ("of", True), ("True", False)])
+def test_typescript_keyword_weights(token: str, is_keyword: bool, tmp_path: Path) -> None:
+    from codebleu import calc_codebleu
+
+    (tmp_path / "typescript.txt").write_text("", encoding="utf-8")
+    reference = f"{token} marker"
+    prediction = f"{token} other"
+    weighted = calc_codebleu([reference], [prediction], "typescript")["weighted_ngram_match_score"]
+    unweighted = calc_codebleu([reference], [prediction], "typescript", keywords_dir=tmp_path)[
+        "weighted_ngram_match_score"
+    ]
+    assert (weighted > unweighted) is is_keyword
+
+
+def test_fortran_derived_array_write_does_not_assign_the_index() -> None:
+    code = "program main\ntype element\ninteger :: field\nend type\ntype(element) :: a(3)\ninteger :: i=1, x=2\na(i)%field=x\nprint *, i\nend program"
+    parser = Parser(get_tree_sitter_language("fortran"))
+    assert not parser.parse(code.encode("utf-8")).root_node.has_error
+    dataflow = get_data_flow(code, [parser, dfg_function["fortran"]])
+    definitions = [item for item in dataflow if item[0] == "i" and item[2] == "computedFrom"]
+    assert len(definitions) == 1
+    assert definitions[0][3] == ["1"]
+    assert dataflow[-1][4] == [definitions[0][1]]
