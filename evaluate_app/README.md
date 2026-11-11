@@ -76,7 +76,7 @@ result = calc_codebleu([reference], [prediction], lang="python", weights=(0.25, 
 print(result)
 {
   'codebleu': 0.7135,
-  'ngram_match_score': 0.1041, 
+  'ngram_match_score': 0.1042,
   'weighted_ngram_match_score': 0.7500,
   'syntax_match_score': 1.0, 
   'dataflow_match_score': 1.0

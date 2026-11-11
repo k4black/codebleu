@@ -83,4 +83,4 @@ CodeBLEU measures token, structure, and dependency similarity.
 It does not execute programs or prove semantic equivalence.
 Identical scores for programs with different behavior do not alone establish an implementation defect, as discussed in issue #32.
 Use execution tests when behavioral correctness matters.
-Language extraction remains approximate. The language-support PR handles language-specific grammar repairs separately.
+Language extraction remains approximate.
