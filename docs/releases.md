@@ -2,6 +2,7 @@
 
 Release Please reads Conventional Commits on `main` and opens a release PR.
 The PR updates `VERSION` and `CHANGELOG.md` together.
+Release Please owns the changelog. Do not add manual `Unreleased` sections.
 Merge that PR after CI passes.
 Release Please then creates the matching tag and GitHub release.
 The published release starts `publish.yml`, which builds and publishes the package through PyPI trusted publishing.
