@@ -114,7 +114,8 @@ Feel free to check the HF Space with online example: [k4black/codebleu](https://
 ## Contributing
 
 Contributions are welcome!  
-If you have any questions, suggestions, or bug reports, please open an issue on GitHub.
+For questions, suggestions, and non-security bugs, open a [GitHub issue](https://github.com/k4black/codebleu/issues).
+Report vulnerabilities through [private vulnerability reporting](https://github.com/k4black/codebleu/security/advisories/new).
 
 Make your own fork and clone it:
 ```bash

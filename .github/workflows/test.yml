@@ -74,7 +74,9 @@ jobs:
       - name: Check installed package
         working-directory: ${{ runner.temp }}
         run: >-
-          python -c "import pathlib, sysconfig, codebleu;
+          python -c "import pathlib, sysconfig, codebleu; from importlib.metadata import metadata;
+          assert not metadata('codebleu').get('Author-email');
+          assert not metadata('codebleu').get('Maintainer-email');
           assert pathlib.Path(codebleu.__file__).is_relative_to(sysconfig.get_path('purelib'));
           assert (pathlib.Path(codebleu.__file__).parent / 'keywords/python.txt').is_file()"
       - name: Test installed wheel outside checkout

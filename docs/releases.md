@@ -35,6 +35,9 @@ The App creates ordinary PRs. A maintainer merges the release PR.
 Keep the existing trusted publisher for project `codebleu` at <https://pypi.org/manage/project/codebleu/settings/publishing/>.
 The publisher must name owner `k4black`, repository `codebleu`, workflow `publish.yml`, and environment `pypi`.
 No PyPI API token is required.
+Wheel metadata checks reject author and maintainer email fields before upload.
+Package contact links point to GitHub issues, pull requests, and private vulnerability reports.
+Historical PyPI artifacts retain their original metadata.
 Keep `HF_TOKEN` as a repository secret for the existing Hugging Face synchronization.
 
 ## First run

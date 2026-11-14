@@ -9,7 +9,7 @@ description = "Unofficial CodeBLEU implementation that supports Linux, MacOS and
 readme = "README.md"
 license = "MIT"
 authors = [
-  {name = "Konstantin Chernyshev", email = "kdchernyshev+github@gmail.com"},
+  {name = "Konstantin Chernyshev"},
 ]
 keywords = ["codebleu", "code", "bleu", "nlp", "natural language processing", "programming", "evaluate", "evaluation", "code generation", "metrics"]
 dynamic = ["version"]
@@ -43,7 +43,10 @@ exclude = ["tests", "tests.*", "codebleu.parser.tree-sitter"]
 codebleu = "codebleu.__main__:cli"
 
 [project.urls]
-homepage = "https://github.com/k4black/codebleu"
+Homepage = "https://github.com/k4black/codebleu"
+Issues = "https://github.com/k4black/codebleu/issues"
+"Pull Requests" = "https://github.com/k4black/codebleu/pulls"
+Security = "https://github.com/k4black/codebleu/security/advisories/new"
 
 [project.optional-dependencies]
 all = [
