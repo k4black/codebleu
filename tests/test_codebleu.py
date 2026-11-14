@@ -12,10 +12,14 @@ from codebleu.utils import get_tree_sitter_language
 @pytest.mark.parametrize(
     ["predictions", "references", "codebleu"],
     [
-        (["some rannnndom words in length more than 3"], ["def test ( ) :\n pass"], 0.25),  # cause data_flow=1
-        (["def bar ( y , x ) :\n    a = x * x\n    return a"], ["def foo ( x ) :\n    return x"], 0.36),
-        (["def foo ( x ) :\n    return x * x"], ["def bar ( x ) :\n    return x"], 0.61),
-        (["def bar ( x ) :\n    return x"], ["def foo ( x ) :\n    return x"], 0.85),
+        (
+            ["some rannnndom words in length more than 3"],
+            ["def test ( ) :\n pass"],
+            0.0,
+        ),  # A zero data-flow score contributes zero, issue #59.
+        (["def bar ( y , x ) :\n    a = x * x\n    return a"], ["def foo ( x ) :\n    return x"], 0.4832567235),
+        (["def foo ( x ) :\n    return x * x"], ["def bar ( x ) :\n    return x"], 0.6426545748),
+        (["def bar ( x ) :\n    return x"], ["def foo ( x ) :\n    return x"], 0.9111516953),
         (["def foo ( x ) :\n    return x"], ["def foo ( x ) :\n    return x"], 1.0),
     ],
 )
@@ -60,7 +64,7 @@ def test_matching_text_fragments_for_all_langs(lang: str) -> None:
     assert result["ngram_match_score"] == 1.0
     assert result["syntax_match_score"] == 1.0
     assert result["dataflow_match_score"] == 0.0
-    assert result["codebleu"] == 1.0
+    assert result["codebleu"] == 0.75
 
 
 @pytest.mark.parametrize("lang", AVAILABLE_LANGS)
@@ -91,18 +95,18 @@ def test_error_when_input_length_mismatch() -> None:
             ["public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? -1 : 1 ) ; }"],
             ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? -1 : 1 ) ; }"],
             0.7846,
-            11 / 19,  # In example, it is 13/21, but with new version of tree-sitter it is 11/19
+            8 / 19,  # Clipped subtree counts with the current Java grammar.
             2 / 3,
-            0.7019,  # Should be 0.7238 if AST=13/21 in the paper, however at the moment tee-sitter AST is 11/19
+            0.6879139881,  # Corrected unigram precision and clipped AST counts.
         ),
         # https://arxiv.org/pdf/2009.10297.pdf "3.4 Two Examples" at the page 4
         (
             ["public static int Sign ( double d ) { return ( float ) ( ( d == 0 ) ? 0 : ( c < 0.0 ) ? -1 : 1 ) ;"],
             ["public static int Sign ( double d ) { return ( int ) ( ( d == 0 ) ? 0 : ( d < 0 ) ? -1 : 1 ) ; }"],
             0.7543,
-            11 / 19,  # In example, it is 13/21, but with new version of tree-sitter it is 11/19
+            8 / 19,  # Clipped subtree counts with the current Java grammar.
             2 / 3,
-            0.6873,  # Should be 0.6973 if AST=13/21 in the paper, however at the moment tee-sitter AST is 11/19
+            0.6732451227,  # Corrected precision, brevity penalty, and AST clipping.
         ),
         # https://arxiv.org/pdf/2009.10297.pdf "3.4 Two Examples" at the page 4
         (
@@ -111,7 +115,7 @@ def test_error_when_input_length_mismatch() -> None:
             0.7571,  # Error in the Figure 4, text "Example 2" states 0.7571, not 0.6814,
             1.0,
             1.0,
-            0.8804,  # Error in the Figure 4, text "Example 2" states 0.8804, not 0.8397,
+            0.9263537043,  # Weighted unigram precision replaces the released four-gram recall.
         ),
     ],
 )
@@ -139,12 +143,10 @@ def test_code_x_glue_readme_examples(
 @pytest.mark.parametrize(
     ["predictions", "references", "codebleu"],
     [
-        # ([], [], 1.0),
-        # ([], [[]], 1.0),
-        (["def foo ( x ) : pass"], ["def foo ( x ) : pass"], 1.0),
-        (["def foo ( x ) : pass"], [["def foo ( x ) : pass"]], 1.0),
-        (["def foo ( x ) : pass"], [["def bar ( x ) : pass", "def foo ( x ) : pass"]], 0.95),
-        (["def foo ( x ) : pass"], [["def foo ( x ) : pass", "def bar ( x ) : pass"]], 0.95),
+        (["def foo ( x ) : pass"], ["def foo ( x ) : pass"], 0.75),
+        (["def foo ( x ) : pass"], [["def foo ( x ) : pass"]], 0.75),
+        (["def foo ( x ) : pass"], [["def bar ( x ) : pass", "def foo ( x ) : pass"]], 0.75),
+        (["def foo ( x ) : pass"], [["def foo ( x ) : pass", "def bar ( x ) : pass"]], 0.75),
     ],
 )
 def test_input_variants(predictions: List[Any], references: List[Any], codebleu: float) -> None:
