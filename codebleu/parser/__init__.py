@@ -3,6 +3,7 @@
 
 from .DFG import (
     DFG_csharp,
+    DFG_fortran,
     DFG_go,
     DFG_java,
     DFG_javascript,
@@ -20,6 +21,7 @@ from .utils import (
 
 __all__ = [
     "DFG_csharp",
+    "DFG_fortran",
     "DFG_go",
     "DFG_java",
     "DFG_javascript",

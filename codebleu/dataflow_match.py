@@ -6,6 +6,7 @@ from tree_sitter import Parser
 
 from .parser import (
     DFG_csharp,
+    DFG_fortran,
     DFG_go,
     DFG_java,
     DFG_javascript,
@@ -26,6 +27,9 @@ dfg_function = {
     "go": DFG_go,
     "php": DFG_php,
     "javascript": DFG_javascript,
+    "typescript": DFG_javascript,
+    "tsx": DFG_javascript,
+    "fortran": DFG_fortran,
     "c_sharp": DFG_csharp,
     "c": DFG_csharp,  # XLCoST uses C# parser for C
     "cpp": DFG_csharp,  # XLCoST uses C# parser for C++

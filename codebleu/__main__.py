@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 from typing import List, Tuple
 
-from . import calc_codebleu
+from . import AVAILABLE_LANGS, calc_codebleu
 
 PACKAGE_DIR = Path(__file__).parent
 
@@ -29,7 +29,7 @@ def main(
         for j in range(len(pre_references)):
             ref_for_instance.append(pre_references[j][i])
         references.append(ref_for_instance)
-    assert len(references) == len(pre_references) * len(hypothesis)
+    assert len(references) == len(hypothesis)
 
     code_bleu_score = calc_codebleu(
         references,
@@ -48,7 +48,7 @@ def main(
     print("CodeBLEU score: ", code_bleu_score["codebleu"])
 
 
-if __name__ == "__main__":
+def cli() -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--refs", type=str, nargs="+", required=True, help="reference files")
@@ -57,18 +57,22 @@ if __name__ == "__main__":
         "--lang",
         type=str,
         required=True,
-        choices=["java", "js", "c_sharp", "php", "go", "python", "ruby", "rust"],
+        choices=AVAILABLE_LANGS + ["js"],
     )
     parser.add_argument("--params", type=str, default="0.25,0.25,0.25,0.25", help="alpha, beta and gamma")
 
     args = parser.parse_args()
 
-    lang = args.lang
+    lang = "javascript" if args.lang == "js" else args.lang
     alpha, beta, gamma, theta = [float(x) for x in args.params.split(",")]
 
     main(
         args.refs,
         args.hyp,
-        args.lang,
+        lang,
         weights=(alpha, beta, gamma, theta),
     )
+
+
+if __name__ == "__main__":
+    cli()

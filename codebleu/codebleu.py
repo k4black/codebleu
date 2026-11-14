@@ -59,11 +59,15 @@ def calc_codebleu(
     ngram_match_score = bleu.corpus_bleu(tokenized_refs, tokenized_hyps)
 
     # calculate weighted ngram match
-    with open(keywords_dir / (lang + ".txt"), "r", encoding="utf-8") as f:
+    keyword_lang = "typescript" if lang == "tsx" else lang
+    with open(keywords_dir / (keyword_lang + ".txt"), "r", encoding="utf-8") as f:
         keywords = [x.strip() for x in f.readlines()]
 
     def make_weights(reference_tokens, key_word_list):
-        return {token: 1 if token in key_word_list else 0.2 for token in reference_tokens}
+        return {
+            token: 1 if (token.lower() if lang == "fortran" else token) in key_word_list else 0.2
+            for token in reference_tokens
+        }
 
     tokenized_refs_with_weights = [
         [

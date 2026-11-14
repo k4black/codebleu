@@ -41,7 +41,9 @@ Args:
         should be a string with tokens separated by spaces.
     references: list of reference for each prediction. Each
         reference should be a string with tokens separated by spaces.
-    language: programming language in ['java','js','c_sharp','php','c','python','cpp','go','ruby','rust']. Please note that, due to the way Datasets works, the number of entities in the language array must match the number of entries in the predictions and references arrays, but only the first value from the languages array will be used. This means that you will not be able to compute a metric for different langauges at the same time, but mst do them as sequential calls to CodeBleu.
+    lang: one programming language for the complete batch. Supported values:
+        java, javascript, c_sharp, php, c, python, cpp, go, ruby, rust,
+        typescript, tsx, and fortran.
     weights: tuple of 4 floats to use as weights for scores. Defaults to (0.25, 0.25, 0.25, 0.25).
 Returns:
     codebleu: resulting `CodeBLEU` score,
@@ -53,7 +55,7 @@ Examples:
     >>> metric = evaluate.load("k4black/codebleu")
     >>> ref = "def sum ( first , second ) :\n return second + first"
     >>> pred = "def add ( a , b ) :\n return a + b"
-    >>> results = metric.compute(references=[ref], predictions=[pred], language=["python"])
+    >>> results = metric.compute(references=[ref], predictions=[pred], lang="python")
     >>> print(results)
 """
 
