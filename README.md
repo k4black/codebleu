@@ -114,7 +114,8 @@ Feel free to check the HF Space with online example: [k4black/codebleu](https://
 ## Contributing
 
 Contributions are welcome!  
-If you have any questions, suggestions, or bug reports, please open an issue on GitHub.
+For questions, suggestions, and non-security bugs, open a [GitHub issue](https://github.com/k4black/codebleu/issues).
+Report vulnerabilities through [private vulnerability reporting](https://github.com/k4black/codebleu/security/advisories/new).
 
 Make your own fork and clone it:
 ```bash
@@ -135,17 +136,16 @@ python -m pytest
 
 To perform a style check, run:
 ```bash
-python -m isort codebleu tests --check
-python -m black codebleu tests --check
 python -m ruff check codebleu tests
-python -m mypy codebleu
+python -m ruff format codebleu tests --check
+python -m ty check codebleu
 ```
 
 
-For a release, first merge a PR that updates `VERSION` and `CHANGELOG.md`.
-Publish a GitHub release from that commit with a tag that matches `VERSION`.
-The publish workflow checks the version and builds from the release tag.
-The workflow does not change the protected branch or move tags.
+Release Please opens a PR that updates `VERSION` and `CHANGELOG.md` from Conventional Commits.
+Merge the release PR after CI passes.
+The automation creates the GitHub release and publishes its tagged source to PyPI.
+See [release setup](docs/releases.md) for the GitHub App and trusted publisher configuration.
 
 
 ## License

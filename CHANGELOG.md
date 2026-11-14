@@ -1,13 +1,8 @@
 # Changelog
 
-## Unreleased
+## [0.7.1](https://github.com/k4black/codebleu/releases/tag/0.7.1) (2024-05-30)
 
-- Require Python 3.11 or later. Test Python 3.11 through 3.15 across Linux, Windows, and ARM and Intel macOS.
-- Update Tree-sitter to 0.26.1 and all language grammars to current compatible releases.
-- Update build, test, lint, Evaluate, and GitHub Actions dependencies. Remove unused test dependencies and obsolete stubs.
-- Test installed wheels outside the checkout. Check valid syntax and metric components for all supported languages.
-- Exclude local root files and obsolete parser binaries from source distributions.
-- Build releases from their tags without changes to the protected branch or existing tags.
-- Add Evaluate dependency updates and advisory Conventional Commit PR-title checks.
+- Fix publication of the 0.7.0 package.
+- Update cibuildwheel from 2.18.0 to 2.18.1 in PR #49.
 
-Grammar updates can change AST shapes and metric scores. The metric formulas remain unchanged.
+[Full changes from 0.7.0 to 0.7.1](https://github.com/k4black/codebleu/compare/0.7.0...0.7.1).

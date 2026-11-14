@@ -30,9 +30,24 @@ jobs:
         run: |
           python3 -m pip install --upgrade build
           python3 -m build --wheel --sdist --outdir ./dist
+      - name: Check public package metadata
+        run: |
+          python - <<'PYTHON'
+          from email.parser import BytesParser
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          [wheel] = Path("dist").glob("*.whl")
+          with ZipFile(wheel) as archive:
+              [name] = [name for name in archive.namelist() if name.endswith(".dist-info/METADATA")]
+              metadata = BytesParser().parsebytes(archive.read(name))
+          assert not metadata.get("Author-email"), "Author email must not be published"
+          assert not metadata.get("Maintainer-email"), "Maintainer email must not be published"
+          PYTHON
       - uses: pypa/gh-action-pypi-publish@v1.14.3
 
   sync-to-hf-hub:
+    needs: release-python-package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
